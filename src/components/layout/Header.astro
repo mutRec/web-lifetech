@@ -16,7 +16,7 @@ const slugify = (value: string) =>
     .replace(/(^-|-$)/g, '');
 
 const linkClass =
-  'rounded-lg px-3 py-2 font-display text-sm font-semibold text-brand-800 transition-colors hover:bg-brand-50 hover:text-brand-600 aria-[current=page]:text-brand-600';
+  'inline-flex items-center rounded-lg px-3 py-2 font-display text-sm font-semibold text-brand-800 transition-colors hover:bg-brand-50 hover:text-brand-600 aria-[current=page]:text-brand-600';
 
 const megaColumns = mainNav.find((entry) => entry.columns)?.columns ?? [];
 ---
@@ -51,7 +51,7 @@ const megaColumns = mainNav.find((entry) => entry.columns)?.columns ?? [];
                   data-dropdown-trigger
                   aria-expanded="false"
                   aria-controls={`menu-${slugify(item.label)}`}
-                  class="flex items-center gap-1 rounded-lg px-3 py-2 font-display text-sm font-semibold text-brand-800 transition-colors hover:bg-brand-50 hover:text-brand-600"
+                  class="inline-flex items-center gap-1 rounded-lg px-3 py-2 font-display text-sm font-semibold text-brand-800 transition-colors hover:bg-brand-50 hover:text-brand-600"
                 >
                   {item.label}
                   <Icon name="lucide:chevron-down" class="size-4" />
