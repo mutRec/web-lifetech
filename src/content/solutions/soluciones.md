@@ -19,7 +19,7 @@ seo:
 
 ## Una tecnología, tres formas de aplicarla
 
-Cada proyecto tiene un perfil de consumo, una potencia contratada y unos objetivos distintos. Por eso organizamos nuestras soluciones en tres grandes ámbitos, con productos y configuraciones específicas para cada uno. Así de sencillo.
+Cada proyecto tiene un perfil de consumo, una potencia contratada y unos objetivos distintos. Por eso organizamos nuestras soluciones en tres grandes ámbitos, con productos y configuraciones específicas para cada uno.
 
 ### Residencial
 
