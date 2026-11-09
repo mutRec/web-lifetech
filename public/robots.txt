@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# Pàgines sense interès per als cercadors
+Disallow: /gracias/
+Disallow: /404
+
+Sitemap: https://life-tech.es/sitemap-index.xml

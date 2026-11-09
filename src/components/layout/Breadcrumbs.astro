@@ -1,0 +1,57 @@
+---
+import Icon from '@/components/ui/Icon.astro';
+import { breadcrumbSchema, type Crumb } from '@/lib/schema';
+import JsonLd from '@/components/seo/JsonLd.astro';
+import { cn } from '@/lib/cn';
+
+interface Props {
+  items: Crumb[];
+  tone?: 'light' | 'dark';
+  class?: string;
+  withSchema?: boolean;
+}
+
+const { items, tone = 'light', class: className, withSchema = true } = Astro.props;
+
+const crumbs: Crumb[] = [{ label: 'Inicio', href: '/' }, ...items];
+---
+
+<nav aria-label="Migas de pan" class={cn('text-sm', className)}>
+  <ol class="flex flex-wrap items-center gap-1.5">
+    {crumbs.map((crumb, index) => {
+      const isLast = index === crumbs.length - 1;
+      return (
+        <li class="flex items-center gap-1.5">
+          {crumb.href && !isLast ? (
+            <a
+              href={crumb.href}
+              class={cn(
+                'rounded transition-colors hover:underline',
+                tone === 'dark'
+                  ? 'text-brand-200 hover:text-white'
+                  : 'text-muted hover:text-brand-700',
+              )}
+            >
+              {crumb.label}
+            </a>
+          ) : (
+            <span
+              aria-current={isLast ? 'page' : undefined}
+              class={tone === 'dark' ? 'text-white' : 'font-semibold text-ink'}
+            >
+              {crumb.label}
+            </span>
+          )}
+          {!isLast && (
+            <Icon
+              name="lucide:chevron-right"
+              class={cn('size-3.5', tone === 'dark' ? 'text-brand-300' : 'text-logo-gray')}
+            />
+          )}
+        </li>
+      );
+    })}
+  </ol>
+</nav>
+
+{withSchema && <JsonLd data={breadcrumbSchema(crumbs)} />}

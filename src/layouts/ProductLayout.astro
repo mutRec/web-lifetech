@@ -1,0 +1,374 @@
+---
+/**
+ * Layout comú de fitxes de producte (sèries i models).
+ *
+ * Rep l'entrada de la col·lecció `products` i, opcionalment, el producte pare,
+ * els models fills i els productes relacionats ja resolts per la pàgina.
+ */
+import { Image } from 'astro:assets';
+import type { CollectionEntry, RenderResult } from 'astro:content';
+
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Container from '@/components/ui/Container.astro';
+import Section from '@/components/ui/Section.astro';
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import Breadcrumbs from '@/components/layout/Breadcrumbs.astro';
+import Button from '@/components/ui/Button.astro';
+import Icon from '@/components/ui/Icon.astro';
+import { productSchema, webPageSchema, type Crumb } from '@/lib/schema';
+import { absoluteUrl } from '@/lib/urls';
+
+export type ProductEntry = CollectionEntry<'products'>;
+
+interface Props {
+  entry: ProductEntry;
+  parent?: ProductEntry;
+  children?: ProductEntry[];
+  related?: ProductEntry[];
+  /** Contingut Markdown ja renderitzat. */
+  Content: RenderResult['Content'];
+}
+
+const { entry, parent, children = [], related = [], Content } = Astro.props;
+const data = entry.data;
+const path = `/${data.slug}/`;
+const title = data.seo?.title ?? data.title;
+const description = data.seo?.description ?? data.excerpt;
+
+const crumbs: Crumb[] = parent
+  ? [{ label: parent.data.title, href: `/${parent.data.slug}/` }, { label: data.title }]
+  : [{ label: data.title }];
+
+const downloadIcons: Record<string, string> = {
+  datasheet: 'lucide:file-text',
+  manual: 'lucide:book-open',
+  'inverter-guide': 'lucide:network',
+  warranty: 'lucide:badge-check',
+};
+
+const kindLabel = data.kind === 'series' ? 'Serie' : 'Modelo';
+
+const jsonLd = [
+  webPageSchema({ name: `${data.title} | LifeTech`, description, path }),
+  ...(data.kind === 'model'
+    ? [
+        productSchema({
+          name: data.title,
+          description,
+          path,
+          image: absoluteUrl(data.hero.src),
+        }),
+      ]
+    : []),
+];
+---
+
+<BaseLayout title={title} description={description} image={data.hero.src} jsonLd={jsonLd}>
+  <!-- Capçalera -->
+  <section class="relative overflow-hidden border-b border-line bg-brand-50">
+    <div
+      class="pointer-events-none absolute -right-24 -top-24 size-[28rem] rounded-full bg-brand-100/70 blur-3xl"
+      aria-hidden="true"
+    ></div>
+
+    <Container class="relative py-10 sm:py-14 lg:py-16">
+      <Breadcrumbs items={crumbs} />
+
+      <div class="mt-8 grid items-center gap-10 lg:grid-cols-2 lg:gap-16">
+        <div>
+          <p class="font-display text-xs font-bold uppercase tracking-[0.16em] text-brand-500">
+            {kindLabel}
+          </p>
+          <h1 class="mt-3 text-3xl font-extrabold leading-tight sm:text-4xl lg:text-5xl">
+            {data.title}
+          </h1>
+          <p class="mt-5 max-w-xl text-base leading-relaxed text-muted sm:text-lg">
+            {data.excerpt}
+          </p>
+
+          <div class="mt-8 flex flex-wrap gap-3">
+            <Button href="/contacto/" icon="lucide:arrow-right">
+              Solicitar información
+            </Button>
+            {data.downloads.length > 0 && (
+              <Button
+                href="#descargas"
+                variant="outline"
+                icon="lucide:download"
+                iconPosition="left"
+              >
+                Documentación
+              </Button>
+            )}
+          </div>
+
+          {parent && (
+            <p class="mt-6 text-sm text-muted">
+              Pertenece a la serie
+              <a
+                href={`/${parent.data.slug}/`}
+                class="ml-1 font-semibold text-brand-700 underline decoration-brand-300 underline-offset-2 hover:text-brand-600"
+              >
+                {parent.data.title}
+              </a>
+            </p>
+          )}
+        </div>
+
+        <div class="relative">
+          <div class="overflow-hidden rounded-3xl bg-white p-4 shadow-card sm:p-6">
+            <Image
+              src={data.hero}
+              alt={`${data.title} de LifeTech`}
+              widths={[400, 700, 1000]}
+              sizes="(min-width: 1024px) 44vw, (min-width: 640px) 80vw, 92vw"
+              format="webp"
+              quality={82}
+              loading="eager"
+              fetchpriority="high"
+              class="mx-auto h-auto w-full rounded-2xl object-contain"
+            />
+          </div>
+        </div>
+      </div>
+
+      {data.highlights.length > 0 && (
+        <dl class="mt-12 grid grid-cols-2 gap-px overflow-hidden rounded-2xl border border-line bg-line sm:grid-cols-4">
+          {data.highlights.map((item) => (
+            <div class="bg-white px-5 py-6 text-center">
+              <dt class="sr-only">{item.label}</dt>
+              <dd>
+                <span class="block font-display text-xl font-extrabold text-brand-700 sm:text-2xl">
+                  {item.value}
+                </span>
+                <span class="mt-1 block text-xs leading-snug text-muted">{item.label}</span>
+              </dd>
+            </div>
+          ))}
+        </dl>
+      )}
+    </Container>
+  </section>
+
+  <!-- Característiques -->
+  {data.features.length > 0 && (
+    <Section tone="white" padding="lg">
+      <SectionHeading
+        eyebrow="Características"
+        title="Por qué elegir este sistema"
+        description="Prestaciones pensadas para instalaciones reales: montaje sencillo, gestión inteligente y protección en cada nivel."
+      />
+
+      <ul class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        {data.features.map((feature) => (
+          <li class="rounded-2xl border border-line p-6 transition-colors hover:border-brand-200">
+            <span class="flex size-11 items-center justify-center rounded-xl bg-brand-50 text-brand-600">
+              <Icon name={feature.icon} class="size-5" />
+            </span>
+            <h3 class="mt-4 font-display text-base font-bold text-ink">{feature.title}</h3>
+            <p class="mt-2 text-sm leading-relaxed text-muted">{feature.text}</p>
+          </li>
+        ))}
+      </ul>
+    </Section>
+  )}
+
+  <!-- Descripció + especificacions -->
+  <Section tone="surface" padding="lg">
+    <div class="grid gap-12 lg:grid-cols-12 lg:gap-16">
+      <div class="lg:col-span-7">
+        <div class="prose prose-base max-w-none prose-headings:font-display prose-headings:text-ink prose-h2:mt-0 prose-h2:text-2xl prose-h3:text-lg prose-p:text-muted prose-li:text-muted prose-strong:text-ink prose-a:text-brand-700">
+          <Content />
+        </div>
+      </div>
+
+      <div class="lg:col-span-5">
+        <div class="rounded-2xl bg-white p-6 shadow-card sm:p-8">
+          <h2 class="font-display text-xl font-bold text-ink">Especificaciones</h2>
+
+          {data.specs.length > 0 ? (
+            <table class="mt-5 w-full text-sm">
+              <caption class="sr-only">Especificaciones técnicas de {data.title}</caption>
+              <tbody class="divide-y divide-line">
+                {data.specs.map((spec) => (
+                  <tr>
+                    <th scope="row" class="py-3 pr-4 text-left align-top font-medium text-muted">
+                      {spec.label}
+                    </th>
+                    <td class="py-3 text-right align-top font-semibold text-ink">{spec.value}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <p class="mt-4 text-sm text-muted">
+              Consulta la ficha técnica para el detalle completo de especificaciones.
+            </p>
+          )}
+
+          <a
+            href="/contacto/"
+            class="mt-6 inline-flex items-center gap-2 font-display text-xs font-bold uppercase tracking-wide text-brand-700 hover:text-brand-600"
+          >
+            ¿Necesitas ayuda para dimensionar?
+            <Icon name="lucide:arrow-right" class="size-4" />
+          </a>
+        </div>
+      </div>
+    </div>
+  </Section>
+
+  <!-- Galeria -->
+  {data.gallery.length > 0 && (
+    <Section tone="white" padding="md">
+      <SectionHeading eyebrow="Galería" title="El producto en detalle" />
+      <ul class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {data.gallery.map((image) => (
+          <li class="overflow-hidden rounded-2xl border border-line bg-surface">
+            <Image
+              src={image.src}
+              alt={image.alt}
+              widths={[320, 640, 960]}
+              sizes="(min-width: 1024px) 30vw, (min-width: 640px) 45vw, 92vw"
+              format="webp"
+              quality={82}
+              loading="lazy"
+              class="h-64 w-full object-cover"
+            />
+          </li>
+        ))}
+      </ul>
+    </Section>
+  )}
+
+  <!-- Descàrregues -->
+  {data.downloads.length > 0 && (
+    <Section id="descargas" tone="surface" padding="md">
+      <div class="grid gap-10 lg:grid-cols-12 lg:gap-16">
+        <div class="lg:col-span-4">
+          <SectionHeading
+            eyebrow="Documentación"
+            title="Manuales y fichas"
+            description="Descarga la documentación oficial del producto en formato PDF."
+          />
+        </div>
+
+        <ul class="grid gap-3 sm:grid-cols-2 lg:col-span-8">
+          {data.downloads.map((download) =>
+            download.href ? (
+              <li>
+                <a
+                  href={download.href}
+                  class="group flex items-start gap-4 rounded-xl border border-line bg-white p-5 transition-colors hover:border-brand-300"
+                >
+                  <span class="flex size-10 shrink-0 items-center justify-center rounded-lg bg-brand-50 text-brand-600">
+                    <Icon
+                      name={downloadIcons[download.kind] ?? 'lucide:file-text'}
+                      class="size-5"
+                    />
+                  </span>
+                  <span class="min-w-0">
+                    <span class="block font-display text-sm font-bold text-ink group-hover:text-brand-700">
+                      {download.label}
+                    </span>
+                    <span class="mt-0.5 block text-xs uppercase tracking-wide text-muted">PDF</span>
+                  </span>
+                  <Icon
+                    name="lucide:download"
+                    class="ml-auto size-4 shrink-0 text-logo-gray transition-colors group-hover:text-brand-600"
+                  />
+                </a>
+              </li>
+            ) : null,
+          )}
+        </ul>
+      </div>
+    </Section>
+  )}
+
+  <!-- Models de la sèrie -->
+  {children.length > 0 && (
+    <Section tone="white" padding="md">
+      <SectionHeading eyebrow="Modelos" title={`Configuraciones de ${data.title}`} />
+      <ul class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {children.map((child) => (
+          <li>
+            <a
+              href={`/${child.data.slug}/`}
+              class="group flex h-full flex-col rounded-2xl border border-line p-6 transition-colors hover:border-brand-300 hover:bg-brand-50"
+            >
+              <span class="font-display text-base font-bold text-ink group-hover:text-brand-700">
+                {child.data.title}
+              </span>
+              <span class="mt-2 flex-1 text-sm leading-relaxed text-muted">
+                {child.data.excerpt}
+              </span>
+              <span class="mt-4 inline-flex items-center gap-2 font-display text-xs font-bold uppercase tracking-wide text-brand-600">
+                Ver modelo
+                <Icon
+                  name="lucide:arrow-right"
+                  class="size-4 transition-transform group-hover:translate-x-1"
+                />
+              </span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </Section>
+  )}
+
+  <!-- Relacionats -->
+  {related.length > 0 && (
+    <Section tone="white" padding="md" class="border-t border-line">
+      <SectionHeading eyebrow="También te puede interesar" title="Productos relacionados" />
+      <ul class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {related.map((item) => (
+          <li>
+            <a
+              href={`/${item.data.slug}/`}
+              class="group flex items-center justify-between gap-4 rounded-xl border border-line px-5 py-4 transition-colors hover:border-brand-300 hover:bg-brand-50"
+            >
+              <span>
+                <span class="block font-display text-sm font-bold text-ink group-hover:text-brand-700">
+                  {item.data.title}
+                </span>
+                <span class="mt-0.5 block text-xs text-muted">
+                  {item.data.kind === 'series' ? 'Serie' : 'Modelo'}
+                </span>
+              </span>
+              <Icon
+                name="lucide:arrow-up-right"
+                class="size-4 shrink-0 text-logo-gray transition-colors group-hover:text-brand-600"
+              />
+            </a>
+          </li>
+        ))}
+      </ul>
+    </Section>
+  )}
+
+  <!-- CTA -->
+  <Section tone="brand-dark" padding="lg">
+    <div class="grid items-center gap-10 lg:grid-cols-2">
+      <SectionHeading
+        eyebrow="Hablemos"
+        title="¿Es este el sistema que necesitas?"
+        description="Cuéntanos tu consumo, el espacio disponible y los objetivos del proyecto. Te ayudamos a definir la configuración óptima."
+        tone="dark"
+      />
+      <div class="flex flex-wrap gap-3 lg:justify-self-end">
+        <Button href="/contacto/" variant="light" size="lg" icon="lucide:arrow-right">
+          Contactar
+        </Button>
+        <Button
+          href="/descarga-productos/"
+          variant="outline"
+          size="lg"
+          class="border-white/30 text-white hover:border-white/60 hover:bg-white/10"
+        >
+          Todas las descargas
+        </Button>
+      </div>
+    </div>
+  </Section>
+</BaseLayout>

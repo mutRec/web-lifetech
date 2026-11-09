@@ -1,0 +1,78 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHero from '@/components/layout/PageHero.astro';
+import Section from '@/components/ui/Section.astro';
+import Button from '@/components/ui/Button.astro';
+import Icon from '@/components/ui/Icon.astro';
+import { webPageSchema } from '@/lib/schema';
+
+const description =
+  'Vídeos de producto, instalación y proyectos de almacenamiento de energía LifeTech. Contenido audiovisual en preparación.';
+
+const jsonLd = [webPageSchema({ name: 'Vídeos | LifeTech', description, path: '/videos/' })];
+---
+
+<BaseLayout title="Vídeos" description={description} jsonLd={jsonLd}>
+  <PageHero
+    eyebrow="Recursos"
+    title="Vídeos"
+    description="Demostraciones de producto, guías de instalación y casos reales para conocer mejor cómo funciona el almacenamiento LifeTech."
+    crumbs={[{ label: 'Vídeos' }]}
+  />
+
+  <Section tone="white" padding="lg">
+    <div class="mx-auto max-w-3xl rounded-3xl border border-line bg-surface px-6 py-14 text-center sm:px-12 sm:py-20">
+      <span class="mx-auto flex size-16 items-center justify-center rounded-2xl bg-white text-brand-600 shadow-card">
+        <Icon name="lucide:play" class="size-7" />
+      </span>
+
+      <h2 class="mt-6 font-display text-2xl font-bold text-ink sm:text-3xl">
+        Estamos preparando los vídeos
+      </h2>
+      <p class="mx-auto mt-4 max-w-xl text-base leading-relaxed text-muted">
+        En breve publicaremos aquí demostraciones de producto, instalaciones reales y explicaciones
+        técnicas del equipo. Mientras tanto, puedes consultar la documentación o hablar directamente
+        con nosotros.
+      </p>
+
+      <div class="mt-8 flex flex-wrap justify-center gap-3">
+        <Button href="/descarga-productos/" icon="lucide:download" iconPosition="left">
+          Ver documentación
+        </Button>
+        <Button href="/contacto/" variant="outline" icon="lucide:arrow-right">
+          Contactar
+        </Button>
+      </div>
+    </div>
+
+    <div class="mx-auto mt-10 grid max-w-3xl gap-4 sm:grid-cols-3">
+      <a
+        href="/soluciones/"
+        class="group rounded-2xl border border-line p-5 text-center transition-colors hover:border-brand-300 hover:bg-brand-50"
+      >
+        <Icon name="lucide:layers" class="mx-auto size-6 text-brand-600" />
+        <span class="mt-3 block font-display text-sm font-bold text-ink group-hover:text-brand-700">
+          Soluciones
+        </span>
+      </a>
+      <a
+        href="/ress/"
+        class="group rounded-2xl border border-line p-5 text-center transition-colors hover:border-brand-300 hover:bg-brand-50"
+      >
+        <Icon name="lucide:battery-charging" class="mx-auto size-6 text-brand-600" />
+        <span class="mt-3 block font-display text-sm font-bold text-ink group-hover:text-brand-700">
+          Productos
+        </span>
+      </a>
+      <a
+        href="/soporte-en-linea/"
+        class="group rounded-2xl border border-line p-5 text-center transition-colors hover:border-brand-300 hover:bg-brand-50"
+      >
+        <Icon name="lucide:headset" class="mx-auto size-6 text-brand-600" />
+        <span class="mt-3 block font-display text-sm font-bold text-ink group-hover:text-brand-700">
+          Soporte
+        </span>
+      </a>
+    </div>
+  </Section>
+</BaseLayout>

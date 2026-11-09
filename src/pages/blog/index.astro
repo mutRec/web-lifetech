@@ -1,0 +1,49 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Container from '@/components/ui/Container.astro';
+import Breadcrumbs from '@/components/layout/Breadcrumbs.astro';
+import Button from '@/components/ui/Button.astro';
+import Icon from '@/components/ui/Icon.astro';
+
+/**
+ * Índex del blog buit (Fase 6).
+ * Manté viu el redirect /hello-world/ → /blog/.
+ * Quan es publiqui el primer article: treure `noindex` i pintar el llistat.
+ */
+const description =
+  'Artículos técnicos sobre almacenamiento de energía, baterías LFP y autoconsumo.';
+---
+
+<BaseLayout title="Blog" description={description} noindex>
+  <section class="border-b border-line bg-brand-50">
+    <Container class="py-12 sm:py-16">
+      <Breadcrumbs items={[{ label: 'Blog' }]} />
+      <h1 class="mt-6 text-3xl font-extrabold sm:text-4xl">Blog</h1>
+      <p class="mt-4 max-w-2xl text-base leading-relaxed text-muted sm:text-lg">
+        Estamos preparando contenido técnico sobre almacenamiento de energía: guías de dimensionado,
+        comparativas de química de baterías y casos de uso reales.
+      </p>
+    </Container>
+  </section>
+
+  <Container class="py-16 sm:py-20">
+    <div class="mx-auto max-w-xl rounded-2xl border border-line bg-white p-8 text-center shadow-card">
+      <span class="mx-auto flex size-14 items-center justify-center rounded-full bg-brand-50 text-brand-600">
+        <Icon name="lucide:pen-line" class="size-7" />
+      </span>
+      <h2 class="mt-5 text-xl font-bold">Próximamente</h2>
+      <p class="mt-2 text-sm leading-relaxed text-muted">
+        Mientras tanto, puedes consultar las fichas técnicas, los manuales y las preguntas
+        frecuentes.
+      </p>
+      <div class="mt-7 flex flex-wrap justify-center gap-3">
+        <Button href="/descarga-productos/" variant="secondary" icon="lucide:download">
+          Descargas
+        </Button>
+        <Button href="/faqs/" variant="outline">
+          Ver FAQs
+        </Button>
+      </div>
+    </div>
+  </Container>
+</BaseLayout>

@@ -1,0 +1,101 @@
+@import 'tailwindcss';
+@plugin '@tailwindcss/typography';
+
+@theme {
+  /* ---- Tipografia ------------------------------------------------ */
+  --font-sans: var(--font-open-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-montserrat), ui-sans-serif, system-ui, sans-serif;
+
+  /* ---- Marca ----------------------------------------------------- */
+  --color-brand-50: #f2f8fa;
+  --color-brand-100: #dceef5;
+  --color-brand-200: #b9dce9;
+  --color-brand-300: #8ac4d8;
+  --color-brand-400: #4a9fbd;
+  --color-brand-500: #03587c;
+  --color-brand-600: #006699;
+  --color-brand-700: #00436d;
+  --color-brand-800: #003554;
+  --color-brand-900: #00283f;
+
+  /* ---- Neutres i estats ------------------------------------------ */
+  --color-ink: #1f2933;
+  --color-muted: #666666;
+  --color-line: #e2e8ed;
+  --color-surface: #f3f3f3;
+  --color-logo-gray: #a2a2a2;
+  --color-danger: #b51e1d;
+
+  /* ---- Formes ---------------------------------------------------- */
+  --radius-btn: 0.9375rem;
+  --shadow-card: 0 8px 30px rgb(0 0 0 / 0.08);
+  --shadow-header: 0 2px 20px rgb(0 0 0 / 0.06);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+    scrollbar-gutter: stable;
+  }
+
+  body {
+    @apply bg-white font-sans text-base leading-relaxed text-muted antialiased;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-display font-bold text-ink;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  a {
+    @apply transition-colors duration-150;
+  }
+
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-brand-600;
+  }
+
+  ::selection {
+    @apply bg-brand-100 text-brand-900;
+  }
+
+  [id] {
+    scroll-margin-top: 6rem;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer components {
+  /* Contenidor base del lloc */
+  .container-page {
+    @apply mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8;
+  }
+
+  /* Text sobre imatge amb garantia de contrast */
+  .overlay-gradient {
+    background: linear-gradient(180deg, rgb(0 40 63 / 0.15) 0%, rgb(0 40 63 / 0.85) 100%);
+  }
+}

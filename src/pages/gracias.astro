@@ -1,0 +1,35 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Container from '@/components/ui/Container.astro';
+import Button from '@/components/ui/Button.astro';
+import Icon from '@/components/ui/Icon.astro';
+---
+
+<BaseLayout
+  title="Gracias por tu mensaje"
+  description="Hemos recibido tu mensaje y te responderemos lo antes posible."
+  noindex
+>
+  <Container class="py-20 sm:py-28">
+    <div class="mx-auto max-w-xl text-center">
+      <span class="mx-auto flex size-16 items-center justify-center rounded-full bg-brand-50 text-brand-600">
+        <Icon name="lucide:check" class="size-8" />
+      </span>
+
+      <h1 class="mt-6 text-3xl font-extrabold sm:text-4xl">Gracias por escribirnos</h1>
+      <p class="mt-4 text-base leading-relaxed text-muted">
+        Hemos recibido tu mensaje correctamente. Nuestro equipo lo revisará y te responderá lo antes
+        posible.
+      </p>
+
+      <div class="mt-9 flex flex-wrap justify-center gap-3">
+        <Button href="/" variant="primary" icon="lucide:arrow-left" iconPosition="left">
+          Volver al inicio
+        </Button>
+        <Button href="/soluciones/" variant="secondary">
+          Ver soluciones
+        </Button>
+      </div>
+    </div>
+  </Container>
+</BaseLayout>

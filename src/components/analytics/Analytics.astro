@@ -1,0 +1,22 @@
+---
+/**
+ * Analítica sense cookies (Umami Cloud).
+ * - Només s'injecta en producció.
+ * - `is:inline` és obligatori per conservar `defer` i els atributs `data-*`.
+ */
+const src = import.meta.env.PUBLIC_ANALYTICS_SRC;
+const websiteId = import.meta.env.PUBLIC_ANALYTICS_ID;
+const enabled = import.meta.env.PROD && Boolean(src) && Boolean(websiteId);
+---
+
+{enabled && (
+  <script
+    is:inline
+    defer
+    src={src}
+    data-website-id={websiteId}
+    data-domains="life-tech.es,www.life-tech.es"
+    data-do-not-track="true"
+    data-exclude-search="true"
+  />
+)}

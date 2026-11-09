@@ -1,0 +1,97 @@
+---
+/**
+ * Layout per a pàgines legals i de text llarg (avís legal, privacitat, cookies).
+ */
+import type { CollectionEntry, RenderResult } from 'astro:content';
+
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Container from '@/components/ui/Container.astro';
+import Section from '@/components/ui/Section.astro';
+import Breadcrumbs from '@/components/layout/Breadcrumbs.astro';
+import Icon from '@/components/ui/Icon.astro';
+import { site } from '@/data/site';
+import { webPageSchema } from '@/lib/schema';
+
+export type LegalEntry = CollectionEntry<'pages'>;
+
+interface Props {
+  entry: LegalEntry;
+  Content: RenderResult['Content'];
+}
+
+const { entry, Content } = Astro.props;
+const data = entry.data;
+const path = `/${data.slug}/`;
+const description = data.seo?.description ?? data.description;
+
+const formattedDate = new Intl.DateTimeFormat('es-ES', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+}).format(data.updated);
+
+const jsonLd = [webPageSchema({ name: `${data.title} | LifeTech`, description, path })];
+---
+
+<BaseLayout title={data.title} description={description} jsonLd={jsonLd}>
+  <section class="border-b border-line bg-brand-50">
+    <Container class="py-10 sm:py-14">
+      <Breadcrumbs items={[{ label: data.title }]} />
+      <h1 class="mt-6 text-3xl font-extrabold sm:text-4xl">{data.title}</h1>
+      <p class="mt-3 text-sm text-muted">
+        Última actualización:
+        <time datetime={data.updated.toISOString()}>{formattedDate}</time>
+      </p>
+    </Container>
+  </section>
+
+  <Section tone="white" padding="lg">
+    <div class="grid gap-12 lg:grid-cols-12 lg:gap-16">
+      <div class="lg:col-span-8">
+        <div class="prose prose-base max-w-none prose-headings:font-display prose-headings:text-ink prose-h2:mt-10 prose-h2:text-2xl prose-h3:text-lg prose-p:text-muted prose-li:text-muted prose-strong:text-ink prose-a:text-brand-700">
+          <Content />
+        </div>
+      </div>
+
+      <aside class="lg:col-span-4">
+        <div class="sticky top-28 space-y-6">
+          <div class="rounded-2xl bg-surface p-6">
+            <p class="font-display text-xs font-bold uppercase tracking-[0.14em] text-brand-500">
+              Información legal
+            </p>
+            <ul class="mt-4 space-y-2 text-sm">
+              {site.legalLinks.map((link) => (
+                <li>
+                  <a
+                    href={link.href}
+                    aria-current={link.href === path ? 'page' : undefined}
+                    class="flex items-center justify-between gap-3 rounded-lg px-3 py-2 text-muted transition-colors hover:bg-white hover:text-brand-700 aria-[current=page]:bg-white aria-[current=page]:font-semibold aria-[current=page]:text-brand-700"
+                  >
+                    {link.label}
+                    <Icon name="lucide:chevron-right" class="size-3.5 text-logo-gray" />
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div class="rounded-2xl border border-line p-6">
+            <p class="font-display text-xs font-bold uppercase tracking-[0.14em] text-brand-500">
+              Contacto
+            </p>
+            <p class="mt-3 text-sm leading-relaxed text-muted">
+              Para cualquier consulta sobre tus datos personales:
+            </p>
+            <a
+              href={`mailto:${site.email}`}
+              class="mt-3 inline-flex items-center gap-2 break-all text-sm font-semibold text-brand-700 hover:text-brand-600"
+            >
+              <Icon name="lucide:mail" class="size-4 shrink-0" />
+              {site.email}
+            </a>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </Section>
+</BaseLayout>

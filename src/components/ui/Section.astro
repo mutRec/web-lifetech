@@ -1,0 +1,47 @@
+---
+import Container from './Container.astro';
+import { cn } from '@/lib/cn';
+
+interface Props {
+  id?: string;
+  tone?: 'white' | 'surface' | 'brand' | 'brand-dark';
+  padding?: 'sm' | 'md' | 'lg';
+  /** Envolta el contingut amb el contenidor centrat (activat per defecte). */
+  container?: boolean;
+  /** Amplada del contenidor interior. */
+  size?: 'narrow' | 'default' | 'wide';
+  class?: string;
+}
+
+const {
+  id,
+  tone = 'white',
+  padding = 'md',
+  container = true,
+  size = 'default',
+  class: className,
+} = Astro.props;
+
+const tones = {
+  white: 'bg-white text-muted',
+  surface: 'bg-surface text-muted',
+  brand: 'bg-brand-50 text-muted',
+  'brand-dark': 'bg-brand-900 text-brand-100',
+} as const;
+
+const paddings = {
+  sm: 'py-10 sm:py-12',
+  md: 'py-16 sm:py-20',
+  lg: 'py-20 sm:py-24 lg:py-28',
+} as const;
+---
+
+<section id={id} class={cn(tones[tone], paddings[padding], className)}>
+  {container ? (
+    <Container size={size}>
+      <slot />
+    </Container>
+  ) : (
+    <slot />
+  )}
+</section>

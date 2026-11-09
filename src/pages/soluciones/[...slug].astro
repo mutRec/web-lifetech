@@ -1,0 +1,57 @@
+---
+/**
+ * Pàgines de solucions i projectes niats: /soluciones/<secció>/
+ * i /soluciones/soluciones-industriales-y-comerciales/<projecte>/
+ *
+ * El `slug` de contingut inclou el prefix "soluciones/", que aquí s'elimina
+ * perquè la ruta ja el proporciona la carpeta.
+ */
+import { getCollection, render } from 'astro:content';
+import type { CollectionEntry, RenderResult } from 'astro:content';
+
+import SolutionLayout from '@/layouts/SolutionLayout.astro';
+
+export async function getStaticPaths() {
+  const solutions = await getCollection('solutions');
+
+  return solutions
+    .filter((entry) => entry.data.slug !== 'soluciones')
+    .map((entry) => ({
+      params: { slug: entry.data.slug.replace(/^soluciones\//, '') },
+      props: { entry },
+    }));
+}
+
+interface Props {
+  entry: CollectionEntry<'solutions'>;
+}
+
+const { entry } = Astro.props;
+
+const [solutions, products] = await Promise.all([
+  getCollection('solutions'),
+  getCollection('products'),
+]);
+
+const parent = entry.data.parent
+  ? solutions.find((item) => item.id === entry.data.parent?.id)
+  : undefined;
+
+const children = solutions
+  .filter((item) => item.data.parent?.id === entry.id)
+  .sort((a, b) => a.data.order - b.data.order);
+
+const relatedProducts = entry.data.products
+  .map((reference) => products.find((item) => item.id === reference.id))
+  .filter((item): item is CollectionEntry<'products'> => Boolean(item));
+
+const { Content }: RenderResult = await render(entry);
+---
+
+<SolutionLayout
+  entry={entry}
+  parent={parent}
+  children={children}
+  products={relatedProducts}
+  Content={Content}
+/>

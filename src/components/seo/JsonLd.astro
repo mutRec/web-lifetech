@@ -1,0 +1,11 @@
+---
+import type { JsonLdObject } from '@/lib/schema';
+
+interface Props {
+  data: JsonLdObject | JsonLdObject[];
+}
+
+const { data } = Astro.props;
+---
+
+<script type="application/ld+json" set:html={JSON.stringify(data)} />

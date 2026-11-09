@@ -1,0 +1,61 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Container from '@/components/ui/Container.astro';
+import Button from '@/components/ui/Button.astro';
+import Icon from '@/components/ui/Icon.astro';
+---
+
+<BaseLayout
+  title="Página no encontrada"
+  description="La página que buscas no existe o ha cambiado de dirección."
+  noindex
+>
+  <Container class="py-20 sm:py-28">
+    <div class="mx-auto max-w-2xl text-center">
+      <p class="font-display text-6xl font-extrabold text-brand-100 sm:text-8xl">404</p>
+
+      <h1 class="mt-4 text-3xl font-extrabold sm:text-4xl">No encontramos esta página</h1>
+      <p class="mt-4 text-base leading-relaxed text-muted">
+        Puede que el enlace esté mal escrito o que la página haya cambiado de dirección. Prueba
+        desde el inicio o consulta nuestras soluciones.
+      </p>
+
+      <div class="mt-9 flex flex-wrap justify-center gap-3">
+        <Button href="/" variant="primary" icon="lucide:arrow-left" iconPosition="left">
+          Ir al inicio
+        </Button>
+        <Button href="/soluciones/" variant="secondary">
+          Ver soluciones
+        </Button>
+        <Button href="/contacto/" variant="outline" icon="lucide:mail">
+          Contacto
+        </Button>
+      </div>
+
+      <div class="mt-12 flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm text-muted">
+        <a href="/ress/" class="hover:text-brand-700">
+          RESS
+        </a>
+        <a href="/lt5000-series/" class="hover:text-brand-700">
+          LT5000 Series
+        </a>
+        <a href="/lt-hv/" class="hover:text-brand-700">
+          LT-HV
+        </a>
+        <a href="/faqs/" class="hover:text-brand-700">
+          FAQs
+        </a>
+        <a href="/descarga-productos/" class="hover:text-brand-700">
+          Descargas
+        </a>
+      </div>
+    </div>
+  </Container>
+
+  <div class="pb-16 text-center">
+    <a href="/" class="inline-flex items-center gap-2 text-sm text-muted hover:text-brand-700">
+      <Icon name="lucide:life-buoy" class="size-4" />
+      ¿Necesitas ayuda? Estamos en contacto
+    </a>
+  </div>
+</BaseLayout>

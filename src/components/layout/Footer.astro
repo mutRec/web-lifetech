@@ -1,0 +1,108 @@
+---
+import Container from '@/components/ui/Container.astro';
+import Icon from '@/components/ui/Icon.astro';
+import { footerNav } from '@/data/navigation';
+import { site } from '@/data/site';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="bg-brand-900 text-brand-100">
+  <Container class="py-14 lg:py-16">
+    <div class="grid gap-10 lg:grid-cols-12 lg:gap-8">
+      <div class="lg:col-span-4">
+        <a href="/" class="inline-flex" aria-label="LifeTech — Inicio">
+          <img
+            src="/brand/logo-life-tech-footer.svg"
+            alt="LifeTech Energy Solucions"
+            width="251"
+            height="152"
+            class="h-16 w-auto"
+            loading="lazy"
+            decoding="async"
+          />
+        </a>
+
+        <p class="mt-5 max-w-xs text-sm leading-relaxed text-brand-100/70">
+          Sistemas de almacenamiento de energía de alta eficiencia para aplicaciones residenciales,
+          industriales y comerciales.
+        </p>
+
+        <div class="mt-6 space-y-3 text-sm">
+          <a
+            href={site.mapsUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="flex items-start gap-2.5 text-brand-100/80 transition-colors hover:text-white"
+          >
+            <Icon name="lucide:map-pin" class="mt-0.5 size-4 shrink-0 text-brand-300" />
+            {site.address.display}
+          </a>
+          <a
+            href={`tel:${site.phone.href}`}
+            class="flex items-center gap-2.5 text-brand-100/80 transition-colors hover:text-white"
+          >
+            <Icon name="lucide:phone" class="size-4 text-brand-300" />
+            {site.phone.display}
+          </a>
+          <a
+            href={`mailto:${site.email}`}
+            class="flex items-center gap-2.5 text-brand-100/80 transition-colors hover:text-white"
+          >
+            <Icon name="lucide:mail" class="size-4 text-brand-300" />
+            {site.email}
+          </a>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-2 gap-8 sm:grid-cols-3 lg:col-span-8 lg:grid-cols-5">
+        {footerNav.map((column) => (
+          <div>
+            {column.href ? (
+              <a
+                href={column.href}
+                class="font-display text-xs font-bold uppercase tracking-[0.14em] text-white transition-colors hover:text-brand-300"
+              >
+                {column.title}
+              </a>
+            ) : (
+              <p class="font-display text-xs font-bold uppercase tracking-[0.14em] text-white">
+                {column.title}
+              </p>
+            )}
+
+            <ul class="mt-4 space-y-2.5">
+              {column.items.map((link) => (
+                <li>
+                  <a
+                    href={link.href}
+                    class="text-sm leading-snug text-brand-100/70 transition-colors hover:text-white"
+                  >
+                    {link.label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </div>
+  </Container>
+
+  <div class="border-t border-white/10">
+    <Container class="flex flex-col gap-4 py-6 text-xs text-brand-100/60 sm:flex-row sm:items-center sm:justify-between">
+      <p>
+        © {year} {site.legalName}. Todos los derechos reservados.
+      </p>
+      <ul class="flex flex-wrap gap-x-5 gap-y-2">
+        {site.legalLinks.map((link) => (
+          <li>
+            <a href={link.href} class="transition-colors hover:text-white">
+              {link.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </Container>
+  </div>
+</footer>

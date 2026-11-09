@@ -1,0 +1,28 @@
+---
+/**
+ * Índex de solucions: /soluciones/
+ */
+import { getCollection, render } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+
+import SolutionLayout from '@/layouts/SolutionLayout.astro';
+
+const solutions = await getCollection('solutions');
+const entry = solutions.find((item) => item.data.slug === 'soluciones');
+
+if (!entry) {
+  throw new Error('Falta la entrada "soluciones" a la col·lecció de solucions.');
+}
+
+const children = solutions
+  .filter((item) => item.data.parent?.id === entry.id)
+  .sort((a, b) => a.data.order - b.data.order);
+
+const { Content } = await render(entry);
+---
+
+<SolutionLayout
+  entry={entry as CollectionEntry<'solutions'>}
+  children={children}
+  Content={Content}
+/>

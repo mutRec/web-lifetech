@@ -1,0 +1,42 @@
+---
+/**
+ * Capçalera comuna de pàgines corporatives: engrunes, títol, descripció i accions.
+ */
+import Container from '@/components/ui/Container.astro';
+import Breadcrumbs from '@/components/layout/Breadcrumbs.astro';
+import type { Crumb } from '@/lib/schema';
+
+interface Props {
+  title: string;
+  description?: string;
+  eyebrow?: string;
+  crumbs?: Crumb[];
+  align?: 'left' | 'center';
+}
+
+const { title, description, eyebrow, crumbs = [], align = 'left' } = Astro.props;
+---
+
+<section class="relative overflow-hidden border-b border-line bg-brand-50">
+  <div
+    class="pointer-events-none absolute -right-20 -top-24 size-96 rounded-full bg-brand-100/80 blur-3xl"
+    aria-hidden="true"
+  ></div>
+
+  <Container class="relative py-10 sm:py-14 lg:py-16">
+    <Breadcrumbs items={crumbs} />
+
+    <div class:list={['mt-8 max-w-3xl', align === 'center' && 'mx-auto text-center']}>
+      {eyebrow && (
+        <p class="font-display text-xs font-bold uppercase tracking-[0.16em] text-brand-500">
+          {eyebrow}
+        </p>
+      )}
+      <h1 class="mt-3 text-3xl font-extrabold leading-tight sm:text-4xl lg:text-5xl">{title}</h1>
+      {description && (
+        <p class="mt-4 text-base leading-relaxed text-muted sm:text-lg">{description}</p>
+      )}
+      <slot />
+    </div>
+  </Container>
+</section>

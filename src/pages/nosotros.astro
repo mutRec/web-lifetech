@@ -1,0 +1,214 @@
+---
+import { Image } from 'astro:assets';
+
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHero from '@/components/layout/PageHero.astro';
+import Section from '@/components/ui/Section.astro';
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import Button from '@/components/ui/Button.astro';
+import Icon from '@/components/ui/Icon.astro';
+import { webPageSchema } from '@/lib/schema';
+import { site } from '@/data/site';
+
+import nosotros1 from '@/assets/images/corporate/nosotros-1.webp';
+import nosotros2 from '@/assets/images/corporate/nosotros-2.webp';
+import plantasFv from '@/assets/images/corporate/plantas-fv.webp';
+
+const description =
+  'En LifeTech nos enorgullece ser referentes en la industria de sistemas de baterías, ofreciendo soluciones innovadoras para abordar las crecientes demandas de energía.';
+
+const jsonLd = [webPageSchema({ name: 'Nosotros | LifeTech', description, path: '/nosotros/' })];
+
+const milestones = [
+  { value: '2016', label: 'Inicio de la revolución energética' },
+  { value: '3 GWh', label: 'Capacidad de producción anual' },
+  { value: 'BMS propio', label: 'Desarrollo y fabricación interna' },
+];
+---
+
+<BaseLayout title="Nosotros" description={description} jsonLd={jsonLd}>
+  <PageHero
+    eyebrow="Nosotros"
+    title="Por un futuro más sostenible y eficiente"
+    description={description}
+    crumbs={[{ label: 'Nosotros' }]}
+  />
+
+  <!-- Presentació -->
+  <Section tone="white" padding="lg">
+    <div class="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
+      <div>
+        <SectionHeading
+          eyebrow="Quiénes somos"
+          title="Tecnología de almacenamiento con criterio industrial"
+          description="Diseñamos y fabricamos sistemas de baterías de litio para aplicaciones residenciales, comerciales e industriales. Nuestro objetivo es que cada instalación tenga la energía que necesita, cuando la necesita y con la seguridad que exige el entorno."
+        />
+
+        <p class="mt-6 text-base leading-relaxed text-muted">
+          Contamos con procesos de fabricación automatizados de última generación y un compromiso
+          constante con la excelencia. Cada batería LifeTech se ensambla con precisión para
+          garantizar la consistencia y la fiabilidad que nuestros clientes esperan.
+        </p>
+
+        <dl class="mt-10 grid gap-4 sm:grid-cols-3">
+          {milestones.map((item) => (
+            <div class="rounded-xl border border-line px-4 py-5">
+              <dt class="sr-only">{item.label}</dt>
+              <dd>
+                <span class="block font-display text-lg font-extrabold text-brand-700">
+                  {item.value}
+                </span>
+                <span class="mt-1 block text-xs leading-snug text-muted">{item.label}</span>
+              </dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+
+      <div class="grid gap-4 sm:grid-cols-2">
+        <Image
+          src={nosotros1}
+          alt="Proceso de fabricación de baterías LifeTech"
+          widths={[320, 640, 960]}
+          sizes="(min-width: 1024px) 24vw, (min-width: 640px) 45vw, 92vw"
+          format="webp"
+          quality={82}
+          loading="lazy"
+          class="h-64 w-full rounded-2xl object-cover sm:h-full"
+        />
+        <Image
+          src={nosotros2}
+          alt="Equipo técnico de LifeTech en una instalación"
+          widths={[320, 640, 960]}
+          sizes="(min-width: 1024px) 24vw, (min-width: 640px) 45vw, 92vw"
+          format="webp"
+          quality={82}
+          loading="lazy"
+          class="h-64 w-full rounded-2xl object-cover sm:mt-12 sm:h-full"
+        />
+      </div>
+    </div>
+  </Section>
+
+  <!-- Compromís amb la qualitat -->
+  <Section tone="surface" padding="lg">
+    <SectionHeading
+      eyebrow="Nuestro compromiso"
+      title="Calidad en cada fase del proceso"
+      description="Desde el diseño de la electrónica hasta la prueba final, cada unidad pasa por controles que aseguran su rendimiento en condiciones reales."
+    />
+
+    <div class="mt-12 grid gap-6 md:grid-cols-2">
+      <article class="rounded-2xl bg-white p-6 shadow-card sm:p-8">
+        <span class="flex size-12 items-center justify-center rounded-xl bg-brand-50 text-brand-600">
+          <Icon name="lucide:settings-2" class="size-6" />
+        </span>
+        <h3 class="mt-5 font-display text-xl font-bold text-ink">
+          Procesos de fabricación automatizados
+        </h3>
+        <p class="mt-3 text-sm leading-relaxed text-muted">
+          En el núcleo de nuestro éxito se encuentran procesos de fabricación automatizados de
+          vanguardia. Cada batería LifeTech se ensambla con precisión y eficiencia, garantizando la
+          consistencia y la calidad que nuestros clientes merecen.
+        </p>
+      </article>
+
+      <article class="rounded-2xl bg-white p-6 shadow-card sm:p-8">
+        <span class="flex size-12 items-center justify-center rounded-xl bg-brand-50 text-brand-600">
+          <Icon name="lucide:factory" class="size-6" />
+        </span>
+        <h3 class="mt-5 font-display text-xl font-bold text-ink">Producción anual de 3 GWh</h3>
+        <p class="mt-3 text-sm leading-relaxed text-muted">
+          Con una capacidad de producción anual de 3 GWh, estamos preparados para abastecer las
+          necesidades de energía de diversos sectores. Ya sea para aplicaciones residenciales,
+          comerciales o industriales, nuestra capacidad nos permite ser un socio fiable para
+          proyectos de cualquier escala.
+        </p>
+      </article>
+    </div>
+  </Section>
+
+  <!-- Innovació -->
+  <Section tone="white" padding="lg">
+    <div class="grid items-center gap-12 lg:grid-cols-2 lg:gap-16">
+      <div class="order-2 lg:order-1">
+        <Image
+          src={plantasFv}
+          alt="Planta fotovoltaica con almacenamiento LifeTech"
+          widths={[480, 960, 1440]}
+          sizes="(min-width: 1024px) 46vw, 92vw"
+          format="webp"
+          quality={82}
+          loading="lazy"
+          class="h-72 w-full rounded-2xl object-cover sm:h-96"
+        />
+      </div>
+
+      <div class="order-1 lg:order-2">
+        <SectionHeading
+          eyebrow="Innovación"
+          title="Innovación en cada celda"
+          description="Desarrollamos nuestra propia tecnología de gestión para exprimir el rendimiento de cada batería sin comprometer la seguridad."
+        />
+
+        <ul class="mt-8 space-y-6">
+          <li class="flex gap-4">
+            <span class="flex size-10 shrink-0 items-center justify-center rounded-lg bg-brand-50 text-brand-600">
+              <Icon name="lucide:cpu" class="size-5" />
+            </span>
+            <div>
+              <h3 class="font-display text-base font-bold text-ink">BMS de fabricación propia</h3>
+              <p class="mt-1 text-sm leading-relaxed text-muted">
+                Diseñamos y fabricamos nuestros propios Sistemas de Gestión de Baterías. Este
+                enfoque personalizado nos permite optimizar el rendimiento y la seguridad de cada
+                celda.
+              </p>
+            </div>
+          </li>
+
+          <li class="flex gap-4">
+            <span class="flex size-10 shrink-0 items-center justify-center rounded-lg bg-brand-50 text-brand-600">
+              <Icon name="lucide:clock" class="size-5" />
+            </span>
+            <div>
+              <h3 class="font-display text-base font-bold text-ink">
+                Historia y compromiso continuo
+              </h3>
+              <p class="mt-1 text-sm leading-relaxed text-muted">
+                LifeTech está a la vanguardia de la revolución energética desde 2016. Durante estos
+                años hemos perfeccionado la tecnología, ampliado la capacidad de producción y
+                mantenido un compromiso constante con la innovación.
+              </p>
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </Section>
+
+  <!-- CTA -->
+  <Section tone="brand-dark" padding="lg">
+    <div class="grid items-center gap-10 lg:grid-cols-2">
+      <SectionHeading
+        eyebrow="¿Alguna duda?"
+        title="Estamos aquí para escucharte"
+        description="Contáctanos y estaremos encantados de responder a tus preguntas sobre productos, proyectos o soporte técnico."
+        tone="dark"
+      />
+      <div class="flex flex-wrap gap-3 lg:justify-self-end">
+        <Button href="/contacto/" variant="light" size="lg" icon="lucide:arrow-right">
+          Contactar
+        </Button>
+        <a
+          href={site.mapsUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-flex items-center justify-center gap-2 rounded-btn border border-white/25 px-6 py-4 font-display text-sm font-bold uppercase tracking-wide text-white transition-colors hover:border-white/60 hover:bg-white/10"
+        >
+          <Icon name="lucide:map-pin" class="size-4" />
+          Cómo llegar
+        </a>
+      </div>
+    </div>
+  </Section>
+</BaseLayout>

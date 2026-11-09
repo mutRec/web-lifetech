@@ -1,0 +1,137 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHero from '@/components/layout/PageHero.astro';
+import Section from '@/components/ui/Section.astro';
+import Icon from '@/components/ui/Icon.astro';
+import { webPageSchema } from '@/lib/schema';
+
+const description =
+  'Descarga las fichas técnicas, manuales de usuario, guías de compatibilidad y documentos de garantía de todos los productos LifeTech.';
+
+const groups = [
+  {
+    title: 'Fichas técnicas',
+    description:
+      'Datos de capacidad, tensión, potencia y condiciones de operación de cada familia.',
+    icon: 'lucide:file-text',
+    files: [
+      { label: 'Ficha técnica RESS', href: '/descargas/ficha-tecnica-ress.pdf' },
+      { label: 'Ficha técnica LV-LITE', href: '/descargas/ficha-tecnica-lv-lite.pdf' },
+      { label: 'Ficha técnica HV-LITE', href: '/descargas/ficha-tecnica-hv-lite.pdf' },
+      { label: 'Ficha técnica LT5000', href: '/descargas/ficha-tecnica-lt5000.pdf' },
+      { label: 'Ficha técnica LT5000R', href: '/descargas/ficha-tecnica-lt5000r.pdf' },
+      { label: 'Ficha técnica LT-12V/24V', href: '/descargas/ficha-tecnica-lt-12v-24v.pdf' },
+      { label: 'Ficha técnica LT-HV', href: '/descargas/ficha-tecnica-lt-hv.pdf' },
+    ],
+  },
+  {
+    title: 'Manuales de usuario',
+    description: 'Instalación, puesta en marcha, configuración y mantenimiento del sistema.',
+    icon: 'lucide:book-open',
+    files: [
+      { label: 'Manual LV-LITE', href: '/descargas/manual-lv-lite.pdf' },
+      { label: 'Manual HV-LITE', href: '/descargas/manual-hv-lite.pdf' },
+      { label: 'Manual LT5000', href: '/descargas/manual-lt5000.pdf' },
+      { label: 'Manual LT5000R', href: '/descargas/manual-lt5000r.pdf' },
+      { label: 'Manual LT-12V/24V', href: '/descargas/manual-lt-12v-24v.pdf' },
+      {
+        label: 'Guía de sustitución de plomo-ácido',
+        href: '/descargas/manual-sustitucion-plomo-acido.pdf',
+      },
+    ],
+  },
+  {
+    title: 'Guías y garantía',
+    description: 'Compatibilidad con inversores y condiciones de cobertura del producto.',
+    icon: 'lucide:badge-check',
+    files: [
+      {
+        label: 'Guía de compatibilidad de inversores',
+        href: '/descargas/guia-compatibilidad-inversores.pdf',
+      },
+      { label: 'Carta de garantía LifeTech', href: '/descargas/carta-de-garantia-lifetech.pdf' },
+    ],
+  },
+];
+
+const jsonLd = [
+  webPageSchema({
+    name: 'Descarga de productos | LifeTech',
+    description,
+    path: '/descarga-productos/',
+  }),
+];
+---
+
+<BaseLayout title="Descarga de productos" description={description} jsonLd={jsonLd}>
+  <PageHero
+    eyebrow="Soporte técnico"
+    title="Descarga de productos"
+    description="Toda la documentación técnica de LifeTech en un solo lugar. Fichas, manuales y guías listas para consultar o compartir con tu instalador."
+    crumbs={[{ label: 'Descarga de productos' }]}
+  />
+
+  <Section tone="white" padding="lg">
+    <div class="space-y-14">
+      {groups.map((group) => (
+        <div>
+          <div class="flex items-start gap-4">
+            <span class="flex size-12 shrink-0 items-center justify-center rounded-xl bg-brand-50 text-brand-600">
+              <Icon name={group.icon} class="size-6" />
+            </span>
+            <div>
+              <h2 class="font-display text-xl font-bold text-ink sm:text-2xl">{group.title}</h2>
+              <p class="mt-1 text-sm text-muted">{group.description}</p>
+            </div>
+          </div>
+
+          <ul class="mt-6 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {group.files.map((file) => (
+              <li>
+                <a
+                  href={file.href}
+                  class="group flex h-full items-start gap-4 rounded-xl border border-line p-5 transition-colors hover:border-brand-300 hover:bg-brand-50"
+                >
+                  <span class="flex size-10 shrink-0 items-center justify-center rounded-lg bg-surface text-brand-600 group-hover:bg-white">
+                    <Icon name="lucide:download" class="size-5" />
+                  </span>
+                  <span class="min-w-0">
+                    <span class="block font-display text-sm font-bold text-ink group-hover:text-brand-700">
+                      {file.label}
+                    </span>
+                    <span class="mt-0.5 block text-xs uppercase tracking-wide text-muted">PDF</span>
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+
+    <div class="mt-14 rounded-2xl bg-surface p-6 sm:p-8">
+      <div class="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+        <div class="flex items-start gap-4">
+          <span class="flex size-11 shrink-0 items-center justify-center rounded-xl bg-white text-brand-600 shadow-card">
+            <Icon name="lucide:life-buoy" class="size-5" />
+          </span>
+          <div>
+            <h2 class="font-display text-lg font-bold text-ink">
+              ¿No encuentras la documentación que buscas?
+            </h2>
+            <p class="mt-1 text-sm text-muted">
+              Escríbenos y te enviaremos el manual o la ficha del modelo que necesitas.
+            </p>
+          </div>
+        </div>
+        <a
+          href="/soporte-en-linea/"
+          class="inline-flex shrink-0 items-center gap-2 font-display text-sm font-bold uppercase tracking-wide text-brand-700 hover:text-brand-600"
+        >
+          Soporte en línea
+          <Icon name="lucide:arrow-right" class="size-4" />
+        </a>
+      </div>
+    </div>
+  </Section>
+</BaseLayout>

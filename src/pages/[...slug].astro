@@ -1,0 +1,94 @@
+---
+/**
+ * Ruta dinàmica d'arrel.
+ *
+ * Genera:
+ *  - Fitxes de producte: /ress/, /ress/ress-75-50/, /lt-hv/lt-hv-480-v-ebc-battery-system/…
+ *  - Pàgines legals: /aviso-legal/, /politica-de-privacidad/, /politica-de-cookies/.
+ *
+ * Les rutes de solucions tenen el seu propi fitxer a `src/pages/soluciones/`.
+ */
+import { getCollection, render } from 'astro:content';
+import type { CollectionEntry, RenderResult } from 'astro:content';
+
+import ProductLayout from '@/layouts/ProductLayout.astro';
+import LegalLayout from '@/layouts/LegalLayout.astro';
+
+export async function getStaticPaths() {
+  const [products, pages] = await Promise.all([getCollection('products'), getCollection('pages')]);
+
+  return [
+    ...products.map((entry) => ({
+      params: { slug: entry.data.slug },
+      props: { type: 'product' as const, entry },
+    })),
+    ...pages.map((entry) => ({
+      params: { slug: entry.data.slug },
+      props: { type: 'legal' as const, entry },
+    })),
+  ];
+}
+
+interface Props {
+  type: 'product' | 'legal';
+  entry: CollectionEntry<'products'> | CollectionEntry<'pages'>;
+}
+
+const { type } = Astro.props;
+
+const allProducts = await getCollection('products');
+
+function sortByOrder<T extends { data: { order: number } }>(entries: T[]): T[] {
+  return [...entries].sort((a, b) => a.data.order - b.data.order);
+}
+
+type View =
+  | {
+      kind: 'product';
+      entry: CollectionEntry<'products'>;
+      parent?: CollectionEntry<'products'>;
+      children: CollectionEntry<'products'>[];
+      related: CollectionEntry<'products'>[];
+      Content: RenderResult['Content'];
+    }
+  | {
+      kind: 'legal';
+      entry: CollectionEntry<'pages'>;
+      Content: RenderResult['Content'];
+    };
+
+let view: View;
+
+if (type === 'product') {
+  const entry = Astro.props.entry as CollectionEntry<'products'>;
+  const { Content } = await render(entry);
+
+  const parent = entry.data.parent
+    ? allProducts.find((item) => item.id === entry.data.parent?.id)
+    : undefined;
+
+  const children = sortByOrder(allProducts.filter((item) => item.data.parent?.id === entry.id));
+
+  const related = entry.data.related
+    .map((reference) => allProducts.find((item) => item.id === reference.id))
+    .filter((item): item is CollectionEntry<'products'> => Boolean(item));
+
+  view = { kind: 'product', entry, parent, children, related, Content };
+} else {
+  const entry = Astro.props.entry as CollectionEntry<'pages'>;
+  const { Content } = await render(entry);
+  view = { kind: 'legal', entry, Content };
+}
+---
+
+{view.kind === 'product' ? (
+  <ProductLayout
+    entry={view.entry}
+    parent={view.parent}
+    children={view.children}
+    related={view.related}
+    Content={view.Content}
+  />
+) : (
+  <LegalLayout entry={view.entry} Content={view.Content} />
+)}

@@ -1,0 +1,203 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Container from '@/components/ui/Container.astro';
+import Section from '@/components/ui/Section.astro';
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import Button from '@/components/ui/Button.astro';
+import Icon from '@/components/ui/Icon.astro';
+import Card from '@/components/ui/Card.astro';
+import { products, solutions } from '@/data/navigation';
+import { site } from '@/data/site';
+import { webPageSchema } from '@/lib/schema';
+
+const highlights = [
+  {
+    icon: 'lucide:clock',
+    title: 'Respaldo 24/7',
+    text: 'Sistemas preparados para mantener el suministro cuando más lo necesitas.',
+  },
+  {
+    icon: 'lucide:shield-check',
+    title: 'Seguridad',
+    text: 'Baterías LFP con protección multicapa y comunicación BMS.',
+  },
+  {
+    icon: 'lucide:badge-check',
+    title: 'Garantía',
+    text: 'Cobertura y soporte técnico durante toda la vida útil del sistema.',
+  },
+  {
+    icon: 'lucide:activity',
+    title: 'Peak shaving',
+    text: 'Reduce los picos de demanda y optimiza el coste energético.',
+  },
+];
+
+const jsonLd = [
+  webPageSchema({
+    name: 'LifeTech | Sistemas de almacenamiento de energía',
+    description: site.description,
+    path: '/',
+  }),
+];
+---
+
+<BaseLayout
+  title="LifeTech | Sistemas de almacenamiento de energía"
+  description={site.description}
+  jsonLd={jsonLd}
+>
+  <!-- Hero -->
+  <section class="relative overflow-hidden bg-brand-900">
+    <div
+      class="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgb(0_102_153/0.55),transparent_55%),radial-gradient(ellipse_at_bottom_left,rgb(3_88_124/0.9),transparent_60%)]"
+      aria-hidden="true"
+    ></div>
+    <div
+      class="absolute inset-0 opacity-[0.07] [background-image:linear-gradient(rgb(255_255_255)_1px,transparent_1px),linear-gradient(90deg,rgb(255_255_255)_1px,transparent_1px)] [background-size:64px_64px]"
+      aria-hidden="true"
+    ></div>
+
+    <Container class="relative py-20 sm:py-28 lg:py-32">
+      <div class="max-w-3xl">
+        <p class="font-display text-xs font-bold uppercase tracking-[0.18em] text-brand-300">
+          Sistemas de almacenamiento de energía
+        </p>
+        <h1 class="mt-4 text-4xl font-extrabold leading-[1.08] text-white sm:text-5xl lg:text-6xl">
+          Energía inteligente para el hogar
+        </h1>
+        <p class="mt-6 max-w-2xl text-base leading-relaxed text-brand-100/80 sm:text-lg">
+          Diseñamos y distribuimos sistemas de baterías de alta eficiencia para viviendas, industria
+          y plantas fotovoltaicas. Más autonomía, más seguridad y un suministro energético estable
+          cuando lo necesitas.
+        </p>
+
+        <div class="mt-9 flex flex-wrap gap-3">
+          <Button href="/soluciones/" variant="light" size="lg" icon="lucide:arrow-right">
+            Ver soluciones
+          </Button>
+          <Button
+            href="/contacto/"
+            variant="outline"
+            size="lg"
+            class="border-white/30 text-white hover:border-white/60 hover:bg-white/10"
+          >
+            Hablar con un experto
+          </Button>
+        </div>
+
+        <dl class="mt-14 grid grid-cols-2 gap-x-6 gap-y-8 border-t border-white/10 pt-8 sm:grid-cols-4">
+          {highlights.map((item) => (
+            <div>
+              <dt class="flex items-center gap-2 font-display text-sm font-semibold text-white">
+                <Icon name={item.icon} class="size-4 text-brand-300" />
+                {item.title}
+              </dt>
+              <dd class="mt-2 text-xs leading-relaxed text-brand-100/60">{item.text}</dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+    </Container>
+  </section>
+
+  <!-- Soluciones -->
+  <Section tone="white" padding="lg">
+    <SectionHeading
+      eyebrow="Soluciones"
+      title="Un sistema de almacenamiento para cada proyecto"
+      description="Tres entornos con necesidades muy distintas, resueltos con la misma tecnología: baterías de litio, electrónica de potencia y monitorización."
+    />
+
+    <div class="mt-12 grid gap-6 md:grid-cols-3">
+      {solutions.map((solution) => (
+        <Card href={solution.href} class="group flex h-full flex-col" hover>
+          <span class="flex size-12 items-center justify-center rounded-xl bg-brand-50 text-brand-600 transition-colors group-hover:bg-brand-100">
+            <Icon name={solution.icon ?? 'lucide:check'} class="size-6" />
+          </span>
+          <h3 class="mt-5 font-display text-lg font-bold text-ink group-hover:text-brand-700">
+            {solution.label}
+          </h3>
+          <p class="mt-2 flex-1 text-sm leading-relaxed text-muted">{solution.description}</p>
+          <span class="mt-5 inline-flex items-center gap-2 font-display text-xs font-bold uppercase tracking-wide text-brand-600">
+            Ver solución
+            <Icon
+              name="lucide:arrow-right"
+              class="size-4 transition-transform group-hover:translate-x-1"
+            />
+          </span>
+        </Card>
+      ))}
+    </div>
+  </Section>
+
+  <!-- Productos -->
+  <Section tone="surface" padding="lg">
+    <div class="flex flex-wrap items-end justify-between gap-6">
+      <SectionHeading
+        eyebrow="Productos"
+        title="Series y modelos"
+        description="Desde sistemas residenciales compactos hasta soluciones de alta tensión para proyectos industriales de gran escala."
+      />
+      <Button href="/descarga-productos/" variant="secondary" icon="lucide:download">
+        Catálogos y manuales
+      </Button>
+    </div>
+
+    <ul class="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+      {products.map((product) => (
+        <li>
+          <a
+            href={product.href}
+            class="group flex items-center justify-between gap-4 rounded-xl border border-line bg-white px-5 py-4 transition-colors hover:border-brand-300 hover:bg-brand-50"
+          >
+            <span class="font-display text-sm font-bold text-ink group-hover:text-brand-700">
+              {product.label}
+            </span>
+            <Icon
+              name="lucide:arrow-up-right"
+              class="size-4 text-logo-gray transition-colors group-hover:text-brand-600"
+            />
+          </a>
+        </li>
+      ))}
+    </ul>
+  </Section>
+
+  <!-- CTA -->
+  <Section tone="brand-dark" padding="lg">
+    <div class="grid items-center gap-10 lg:grid-cols-2">
+      <SectionHeading
+        eyebrow="Hablemos"
+        title="¿Necesitas dimensionar un sistema?"
+        description="Cuéntanos tu caso y te ayudamos a definir la configuración adecuada: potencia, capacidad, espacio disponible y necesidades de respaldo."
+        tone="dark"
+      />
+
+      <div class="lg:justify-self-end">
+        <div class="flex flex-col gap-3 sm:flex-row">
+          <Button href="/contacto/" variant="light" size="lg" icon="lucide:arrow-right">
+            Contactar
+          </Button>
+          <a
+            href={`tel:${site.phone.href}`}
+            class="inline-flex items-center justify-center gap-2 rounded-btn border border-white/25 px-8 py-4 font-display text-sm font-bold uppercase tracking-wide text-white transition-colors hover:border-white/60 hover:bg-white/10"
+          >
+            <Icon name="lucide:phone" class="size-4" />
+            {site.phone.display}
+          </a>
+        </div>
+
+        <p class="mt-6 text-sm text-brand-100/70">
+          También puedes escribirnos a
+          <a
+            href={`mailto:${site.email}`}
+            class="font-semibold text-white underline hover:no-underline"
+          >
+            {site.email}
+          </a>
+        </p>
+      </div>
+    </div>
+  </Section>
+</BaseLayout>

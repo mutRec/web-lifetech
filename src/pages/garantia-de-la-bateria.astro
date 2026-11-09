@@ -1,0 +1,176 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHero from '@/components/layout/PageHero.astro';
+import Section from '@/components/ui/Section.astro';
+import Button from '@/components/ui/Button.astro';
+import Icon from '@/components/ui/Icon.astro';
+import { site } from '@/data/site';
+import { webPageSchema } from '@/lib/schema';
+
+const description =
+  'Condiciones y proceso de garantía de las baterías LifeTech: cobertura, requisitos de instalación, exclusiones y cómo abrir una incidencia.';
+
+const jsonLd = [
+  webPageSchema({
+    name: 'Garantía de la batería | LifeTech',
+    description,
+    path: '/garantia-de-la-bateria/',
+  }),
+];
+
+const families = [
+  { label: 'RESS', href: '/ress/' },
+  { label: 'LV-LITE / HV-LITE', href: '/lv-lite-series/' },
+  { label: 'LT5000 / LT5000R', href: '/lt5000-series/' },
+  { label: 'LT-12V/24V', href: '/lt-12v-24v-series/' },
+  { label: 'LT-HV', href: '/lt-hv/' },
+];
+
+const steps = [
+  {
+    title: 'Localiza el número de serie',
+    text: 'Está en la etiqueta del producto o en la documentación de entrega. Anota también el modelo y la fecha de instalación.',
+  },
+  {
+    title: 'Prepara las pruebas',
+    text: 'Adjunta una captura de la app o del BMS con la tensión, la corriente y el estado de carga en el momento del fallo.',
+  },
+  {
+    title: 'Contacta con soporte',
+    text: 'Escríbenos a service@life-tech.es con el modelo, el número de serie y una descripción del problema.',
+  },
+  {
+    title: 'Diagnóstico y solución',
+    text: 'Revisamos la configuración y la instalación. Si procede, tramitamos la garantía según la carta de garantía del producto.',
+  },
+];
+---
+
+<BaseLayout title="Garantía de la batería" description={description} jsonLd={jsonLd}>
+  <PageHero
+    eyebrow="Soporte técnico"
+    title="Garantía de la batería"
+    description="Las baterías LifeTech cuentan con una carta de garantía que define la cobertura, el periodo y las condiciones de aplicación según el modelo y el uso."
+    crumbs={[{ label: 'Garantía de la batería' }]}
+  />
+
+  <Section tone="white" padding="lg">
+    <div class="grid gap-12 lg:grid-cols-12 lg:gap-16">
+      <div class="lg:col-span-8">
+        <div class="prose prose-base max-w-none prose-headings:font-display prose-headings:text-ink prose-h2:mt-0 prose-h2:text-2xl prose-p:text-muted prose-li:text-muted prose-strong:text-ink prose-a:text-brand-700">
+          <h2>Qué cubre la garantía</h2>
+          <p>
+            La carta de garantía de LifeTech recoge las condiciones de cobertura de cada familia de
+            baterías. El periodo y el alcance dependen del modelo, de la configuración de la
+            instalación y del uso previsto.
+          </p>
+          <p>
+            Para conocer las condiciones exactas de tu equipo, consulta el documento de garantía que
+            se entrega con el producto y la documentación contractual de la instalación.
+          </p>
+
+          <h2>Requisitos para que la garantía sea aplicable</h2>
+          <ul>
+            <li>Instalación realizada según el manual de usuario y la normativa aplicable.</li>
+            <li>
+              Uso del sistema dentro de los límites de tensión, corriente y temperatura indicados.
+            </li>
+            <li>Configuración de carga y descarga compatible con el inversor y el BMS.</li>
+            <li>Conservación de la factura y de la documentación de puesta en marcha.</li>
+            <li>No manipulación del producto por personal no autorizado.</li>
+          </ul>
+
+          <h2>Exclusiones habituales</h2>
+          <p>
+            Quedan fuera de la cobertura los daños derivados de una instalación incorrecta, el uso
+            fuera de especificaciones, las modificaciones no autorizadas, los golpes, las
+            inundaciones, los incendios o cualquier causa de fuerza mayor. También quedan excluidos
+            los daños indirectos y los costes de desmontaje o transporte no acordados previamente.
+          </p>
+
+          <h2>Proceso de gestión</h2>
+          <p>
+            El primer paso es siempre una revisión técnica de la configuración. Muchos avisos de
+            fallo se deben a parámetros de carga, a una comunicación defectuosa con el inversor o a
+            una instalación que no cumple el manual. Si tras el diagnóstico se confirma un defecto
+            de fabricación, se tramita la garantía conforme al documento aplicable.
+          </p>
+        </div>
+      </div>
+
+      <aside class="lg:col-span-4">
+        <div class="sticky top-28 space-y-6">
+          <div class="rounded-2xl bg-surface p-6 sm:p-8">
+            <h2 class="font-display text-xl font-bold text-ink">Documentación</h2>
+            <p class="mt-3 text-sm leading-relaxed text-muted">
+              Descarga la carta de garantía y el manual de tu modelo antes de abrir una incidencia.
+            </p>
+            <div class="mt-6 flex flex-col gap-3">
+              <a
+                href="/descargas/carta-de-garantia-lifetech.pdf"
+                class="inline-flex items-center justify-center gap-2 rounded-btn bg-brand-700 px-6 py-3 font-display text-sm font-bold uppercase tracking-wide text-white transition-colors hover:bg-brand-600"
+              >
+                <Icon name="lucide:download" class="size-4" />
+                Carta de garantía
+              </a>
+              <Button href="/descarga-productos/" variant="outline" class="w-full">
+                Manuales de usuario
+              </Button>
+            </div>
+          </div>
+
+          <div class="rounded-2xl border border-line p-6">
+            <p class="font-display text-xs font-bold uppercase tracking-[0.14em] text-brand-500">
+              Contacto técnico
+            </p>
+            <ul class="mt-4 space-y-2 text-sm text-muted">
+              <li class="flex items-center gap-2">
+                <Icon name="lucide:phone" class="size-4 text-brand-500" />
+                <a href={`tel:${site.support.phone.href}`} class="hover:text-brand-700">
+                  {site.support.phone.display}
+                </a>
+              </li>
+              <li class="flex items-center gap-2">
+                <Icon name="lucide:mail" class="size-4 text-brand-500" />
+                <a href={`mailto:${site.support.email}`} class="break-all hover:text-brand-700">
+                  {site.support.email}
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </Section>
+
+  <Section tone="surface" padding="md">
+    <ol class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      {steps.map((step, index) => (
+        <li class="rounded-2xl bg-white p-6 shadow-card">
+          <span class="flex size-9 items-center justify-center rounded-full bg-brand-50 font-display text-sm font-extrabold text-brand-700">
+            {String(index + 1).padStart(2, '0')}
+          </span>
+          <h3 class="mt-4 font-display text-base font-bold text-ink">{step.title}</h3>
+          <p class="mt-2 text-sm leading-relaxed text-muted">{step.text}</p>
+        </li>
+      ))}
+    </ol>
+
+    <div class="mt-10 rounded-2xl bg-white p-6 shadow-card sm:p-8">
+      <h2 class="font-display text-lg font-bold text-ink">Familias de producto</h2>
+      <ul class="mt-4 flex flex-wrap gap-2">
+        {families.map((family) => (
+          <li>
+            <a
+              href={family.href}
+              class="inline-flex items-center gap-2 rounded-full border border-line px-4 py-2 text-sm font-semibold text-brand-700 transition-colors hover:border-brand-300 hover:bg-brand-50"
+            >
+              {family.label}
+              <Icon name="lucide:arrow-up-right" class="size-3.5" />
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </Section>
+</BaseLayout>

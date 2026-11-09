@@ -1,0 +1,134 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHero from '@/components/layout/PageHero.astro';
+import Section from '@/components/ui/Section.astro';
+import Button from '@/components/ui/Button.astro';
+import Icon from '@/components/ui/Icon.astro';
+import { faqSchema, webPageSchema } from '@/lib/schema';
+import { site } from '@/data/site';
+
+const description =
+  'Respuestas claras sobre conexiones en serie y paralelo, compatibilidad de inversores, BMS y asistencia técnica de los sistemas LifeTech.';
+
+const faqs = [
+  {
+    question: '¿Cuál es el máximo de unidades que puedo conectar en serie del modelo LT-12/24?',
+    answer:
+      'Se pueden conectar hasta 4 unidades en los modelos de 12 V y 2 unidades en los de 24 V.',
+  },
+  {
+    question: '¿Cuál es el máximo de unidades que puedo conectar en paralelo del modelo LT-12/24?',
+    answer: 'Hasta 4 unidades, tanto para los modelos de 12 V como para los de 24 V.',
+  },
+  {
+    question: '¿Con qué inversores son compatibles los modelos LT5000 y LT5000R?',
+    answer:
+      'En el apartado de manuales PDF encontrarás el listado de fabricantes de inversores compatibles con los modelos LT5000 y LT5000R de LifeTech.',
+    href: '/descargas/guia-compatibilidad-inversores.pdf',
+    linkLabel: 'Descargar guía de compatibilidad',
+  },
+  {
+    question:
+      '¿Necesito utilizar un BMS externo para una instalación de 30 unidades en paralelo del modelo LT5000?',
+    answer:
+      'No. Hasta 30 unidades en paralelo basta con la combinación Master/Esclavo utilizando los dips que incorpora la propia batería.',
+  },
+  {
+    question: '¿Cómo puedo visualizar los datos de funcionamiento en el modelo LT-12/24?',
+    answer:
+      'Puedes visualizar los parámetros de funcionamiento de las baterías LT-12/24 mediante Bluetooth desde una aplicación móvil.',
+  },
+  {
+    question:
+      'En caso de dudas técnicas durante la instalación de la batería, ¿ofrecen asistencia en remoto?',
+    answer:
+      'Sí. Dentro del apartado de soporte técnico ofrecemos un servicio de soporte en línea para nuestros clientes.',
+    href: '/soporte-en-linea/',
+    linkLabel: 'Ir a soporte en línea',
+  },
+];
+
+const jsonLd = [
+  webPageSchema({ name: 'FAQs | LifeTech', description, path: '/faqs/' }),
+  faqSchema(faqs.map(({ question, answer }) => ({ question, answer }))),
+];
+---
+
+<BaseLayout title="FAQs" description={description} jsonLd={jsonLd}>
+  <PageHero
+    eyebrow="Soporte técnico"
+    title="Preguntas frecuentes"
+    description="Conectividad sin límites: resolvemos las dudas más habituales sobre instalación, compatibilidad y gestión de nuestras baterías."
+    crumbs={[{ label: 'FAQs' }]}
+  />
+
+  <Section tone="white" padding="lg">
+    <div class="grid gap-12 lg:grid-cols-12 lg:gap-16">
+      <div class="lg:col-span-8">
+        <div class="divide-y divide-line border-y border-line">
+          {faqs.map((faq) => (
+            <details class="group py-2">
+              <summary class="flex cursor-pointer list-none items-start justify-between gap-4 py-4 [&::-webkit-details-marker]:hidden">
+                <h2 class="font-display text-base font-bold text-ink group-hover:text-brand-700 sm:text-lg">
+                  {faq.question}
+                </h2>
+                <span class="mt-0.5 flex size-8 shrink-0 items-center justify-center rounded-full border border-line text-brand-600 transition-transform group-open:rotate-45">
+                  <Icon name="lucide:plus" class="size-4" />
+                </span>
+              </summary>
+              <div class="pb-5 pr-12">
+                <p class="text-sm leading-relaxed text-muted sm:text-base">{faq.answer}</p>
+                {faq.href && (
+                  <a
+                    href={faq.href}
+                    class="mt-3 inline-flex items-center gap-2 font-display text-xs font-bold uppercase tracking-wide text-brand-700 hover:text-brand-600"
+                  >
+                    {faq.linkLabel}
+                    <Icon name="lucide:arrow-right" class="size-4" />
+                  </a>
+                )}
+              </div>
+            </details>
+          ))}
+        </div>
+      </div>
+
+      <aside class="lg:col-span-4">
+        <div class="sticky top-28 rounded-2xl bg-surface p-6 sm:p-8">
+          <span class="flex size-12 items-center justify-center rounded-xl bg-white text-brand-600 shadow-card">
+            <Icon name="lucide:headset" class="size-6" />
+          </span>
+          <h2 class="mt-5 font-display text-xl font-bold text-ink">¿No encuentras tu respuesta?</h2>
+          <p class="mt-3 text-sm leading-relaxed text-muted">
+            El equipo técnico de LifeTech puede ayudarte con la configuración, la compatibilidad o
+            la puesta en marcha de tu instalación.
+          </p>
+
+          <div class="mt-6 flex flex-col gap-3">
+            <Button href="/soporte-en-linea/" icon="lucide:arrow-right" class="w-full">
+              Soporte en línea
+            </Button>
+            <Button href="/contacto/" variant="outline" class="w-full">
+              Contacto general
+            </Button>
+          </div>
+
+          <ul class="mt-6 space-y-2 border-t border-line pt-6 text-sm">
+            <li class="flex items-center gap-2 text-muted">
+              <Icon name="lucide:phone" class="size-4 text-brand-500" />
+              <a href={`tel:${site.support.phone.href}`} class="hover:text-brand-700">
+                {site.support.phone.display}
+              </a>
+            </li>
+            <li class="flex items-center gap-2 text-muted">
+              <Icon name="lucide:mail" class="size-4 text-brand-500" />
+              <a href={`mailto:${site.support.email}`} class="break-all hover:text-brand-700">
+                {site.support.email}
+              </a>
+            </li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+  </Section>
+</BaseLayout>
