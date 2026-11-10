@@ -1,4 +1,6 @@
 ---
+import { Image } from 'astro:assets';
+
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Container from '@/components/ui/Container.astro';
 import Section from '@/components/ui/Section.astro';
@@ -9,6 +11,8 @@ import Card from '@/components/ui/Card.astro';
 import { products, solutions } from '@/data/navigation';
 import { site } from '@/data/site';
 import { webPageSchema } from '@/lib/schema';
+
+import heroImage from '@/assets/images/corporate/slider-principal-life-tech.webp';
 
 const highlights = [
   {
@@ -48,34 +52,43 @@ const jsonLd = [
   jsonLd={jsonLd}
 >
   <!-- Hero -->
-  <section class="relative overflow-hidden bg-brand-900">
+  <section class="relative isolate overflow-hidden bg-brand-900">
+    <!-- Imatge: banda superior al mòbil, fons complet a partir de sm -->
+    <div class="relative aspect-[16/10] w-full sm:absolute sm:inset-0 sm:aspect-auto sm:h-full">
+      <Image
+        src={heroImage}
+        alt=""
+        widths={[640, 1024, 1600, 1920]}
+        sizes="100vw"
+        format="webp"
+        quality={80}
+        loading="eager"
+        fetchpriority="high"
+        class="h-full w-full object-cover object-[68%_50%] sm:object-center"
+        aria-hidden="true"
+      />
+      <!-- Mòbil: la banda es fon amb el fons de marca -->
+      <div
+        class="absolute inset-0 bg-gradient-to-b from-brand-900/10 via-transparent to-brand-900 sm:hidden"
+        aria-hidden="true"
+      ></div>
+      <!-- Escriptori: vel de llegibilitat, més fosc a l'esquerra on va el text -->
+      <div class="absolute inset-0 hidden bg-brand-900/35 sm:block" aria-hidden="true"></div>
+      <div
+        class="absolute inset-0 hidden bg-gradient-to-r from-brand-900/95 via-brand-900/75 to-brand-900/20 sm:block"
+        aria-hidden="true"
+      ></div>
+    </div>
 
-    <!-- Imatge de fons -->
-    <img
-      src="/images/slider-principal-life-tech.webp"
-      alt=""
-      class="absolute inset-0 h-full w-full object-cover"
-      aria-hidden="true"
-    />
-    <!-- Capa fosca per difuminar la foto i garantir llegibilitat -->
-    <div
-      class="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,rgb(0_102_153/0.55),transparent_55%),radial-gradient(ellipse_at_bottom_left,rgb(3_88_124/0.9),transparent_60%)]"
-      aria-hidden="true"
-    ></div>
-    <!-- <div
-      class="absolute inset-0 opacity-[0.07] [background-image:linear-gradient(rgb(255_255_255)_1px,transparent_1px),linear-gradient(90deg,rgb(255_255_255)_1px,transparent_1px)] [background-size:64px_64px]"
-      aria-hidden="true"
-    ></div> -->
-
-    <Container class="relative py-20 sm:py-28 lg:py-32">
+    <Container class="relative py-14 sm:py-28 lg:py-32">
       <div class="max-w-3xl">
         <p class="font-display text-xs font-bold uppercase tracking-[0.18em] text-brand-300">
           Sistemas de almacenamiento de energía
         </p>
-        <h1 class="mt-4 text-4xl font-extrabold leading-[1.08] text-white sm:text-5xl lg:text-6xl">
+        <h1 class="mt-4 text-4xl font-extrabold leading-[1.08] text-white sm:text-5xl sm:[text-shadow:0_2px_16px_rgb(0_40_63/0.45)] lg:text-6xl">
           Energía inteligente para el hogar
         </h1>
-        <p class="mt-6 max-w-2xl text-base leading-relaxed text-brand-100/80 sm:text-lg">
+        <p class="mt-6 max-w-2xl text-base leading-relaxed text-brand-100/90 sm:text-lg">
           Diseñamos y distribuimos sistemas de baterías de alta eficiencia para viviendas, industria
           y plantas fotovoltaicas. Más autonomía, más seguridad y un suministro energético estable
           cuando lo necesitas.
@@ -102,7 +115,7 @@ const jsonLd = [
                 <Icon name={item.icon} class="size-6 text-brand-300" />
                 {item.title}
               </dt>
-              <dd class="mt-2 text-xs leading-relaxed text-brand-100/60">{item.text}</dd>
+              <dd class="mt-2 text-xs leading-relaxed text-brand-100/80">{item.text}</dd>
             </div>
           ))}
         </dl>
