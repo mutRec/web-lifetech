@@ -185,7 +185,7 @@ const childLabels =
           <li>
             <a
               href={`/${child.data.slug}/`}
-              class="group flex h-full flex-col overflow-hidden rounded-2xl border border-line bg-white transition-colors hover:border-brand-300"
+              class="group flex h-full flex-col overflow-hidden rounded-2xl border border-line bg-white transition-colors hover:border-brand-300 hover:bg-brand-50"
             >
               {childKind === 'proyecto' ? (
                 <Image
@@ -214,8 +214,8 @@ const childLabels =
                   {childLabels.link}
                   <Icon
                     name="lucide:arrow-right"
-                    class="size-4 transition-transform group-hover:translate-x-1"
-                  />
+                    class="size-4"
+                  /> <!-- transition-transform group-hover:translate-x-1 -->
                 </span>
               </span>
             </a>
@@ -258,8 +258,8 @@ const childLabels =
                 Ver producto
                 <Icon
                   name="lucide:arrow-right"
-                  class="size-4 transition-transform group-hover:translate-x-1"
-                />
+                  class="size-4"
+                /> <!-- transition-transform group-hover:translate-x-1 -->
               </span>
             </a>
           </li>

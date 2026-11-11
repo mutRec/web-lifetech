@@ -5,7 +5,7 @@ parent: soluciones
 order: 1
 eyebrow: Residencial
 excerpt: Energía inteligente para el hogar. Optimiza el consumo, reduce gastos y gana independencia frente a la red.
-hero: ../../assets/images/products/lt5000r-series-3.webp
+hero: ../../assets/images/corporate/slider-principal-life-tech.webp
 icon: lucide:home
 stats:
   - value: 24/7
