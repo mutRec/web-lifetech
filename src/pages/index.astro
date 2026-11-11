@@ -133,7 +133,7 @@ const jsonLd = [
 
     <div class="mt-12 grid gap-6 md:grid-cols-3">
       {solutions.map((solution) => (
-        <Card href={solution.href} class="group flex h-full flex-col"> <!-- he tret el la class hover -->
+        <Card href={solution.href} class="group flex h-full flex-col border border-transparent transition-colors duration-200 hover:bg-sky-50 hover:border-sky-200"> <!-- he tret el la class hover i he posat stil propi -->
           <span class="flex size-12 items-center justify-center rounded-xl bg-brand-50 text-brand-600 transition-colors group-hover:bg-brand-100">
             <Icon name={solution.icon ?? 'lucide:check'} class="size-6" />
           </span>
