@@ -94,7 +94,8 @@ const hasImage = Boolean(image);
       )}
       <h1
         class:list={[
-          'mt-3 text-3xl font-extrabold leading-tight sm:text-4xl lg:text-5xl',
+          'text-3xl font-extrabold leading-tight sm:text-4xl lg:text-5xl',
+          eyebrow ? 'mt-3' : 'mt-6',
           hasImage && 'text-white sm:[text-shadow:0_2px_16px_rgb(0_0_0/0.45)]',
         ]}
       >

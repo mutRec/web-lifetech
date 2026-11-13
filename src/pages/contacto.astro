@@ -1,12 +1,13 @@
 ---
 import BaseLayout from '@/layouts/BaseLayout.astro';
-import Container from '@/components/ui/Container.astro';
+import PageHero from '@/components/layout/PageHero.astro';
 import Section from '@/components/ui/Section.astro';
-import Breadcrumbs from '@/components/layout/Breadcrumbs.astro';
 import ContactForm from '@/components/forms/ContactForm.astro';
 import Icon from '@/components/ui/Icon.astro';
 import { site } from '@/data/site';
 import { webPageSchema } from '@/lib/schema';
+
+import heroImage from '@/assets/images/corporate/fons-contacte-modern.webp';
 
 const description =
   'Escríbenos a info@life-tech.es, llámanos al 931 840 551 o utiliza el formulario de contacto. Te ayudamos a dimensionar tu sistema de almacenamiento.';
@@ -15,16 +16,12 @@ const jsonLd = [webPageSchema({ name: 'Contacto | LifeTech', description, path: 
 ---
 
 <BaseLayout title="Contacto" description={description} jsonLd={jsonLd}>
-  <section class="border-b border-line bg-brand-50">
-    <Container class="py-12 sm:py-16">
-      <Breadcrumbs items={[{ label: 'Contacto' }]} />
-      <h1 class="mt-6 text-3xl font-extrabold sm:text-4xl">Contacto</h1>
-      <p class="mt-4 max-w-2xl text-base leading-relaxed text-muted sm:text-lg">
-        Si tienes alguna duda sobre nuestros sistemas de almacenamiento, escríbenos y te
-        responderemos lo antes posible.
-      </p>
-    </Container>
-  </section>
+  <PageHero
+    title="Contacto"
+    description="Si tienes alguna duda sobre nuestros sistemas de almacenamiento, escríbenos y te responderemos lo antes posible."
+    crumbs={[{ label: 'Contacto' }]}
+    image={heroImage}
+  />
 
   <Section tone="white" padding="lg">
     <div class="grid gap-12 lg:grid-cols-5 lg:gap-16">
