@@ -1,9 +1,14 @@
 ---
 /**
  * Capçalera comuna de pàgines corporatives: engrunes, títol, descripció i accions.
+ * Si s'informa `image`, la imatge passa a ser el fons del hero amb un tema fosc.
  */
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
 import Container from '@/components/ui/Container.astro';
 import Breadcrumbs from '@/components/layout/Breadcrumbs.astro';
+import { cn } from '@/lib/cn';
 import type { Crumb } from '@/lib/schema';
 
 interface Props {
@@ -12,29 +17,98 @@ interface Props {
   eyebrow?: string;
   crumbs?: Crumb[];
   align?: 'left' | 'center';
+  image?: ImageMetadata;
+  imageAlt?: string;
 }
 
-const { title, description, eyebrow, crumbs = [], align = 'left' } = Astro.props;
+const {
+  title,
+  description,
+  eyebrow,
+  crumbs = [],
+  align = 'left',
+  image,
+  imageAlt = '',
+} = Astro.props;
+
+const hasImage = Boolean(image);
 ---
 
-<section class="relative overflow-hidden border-b border-line bg-brand-50">
-  <div
-    class="pointer-events-none absolute -right-20 -top-24 size-96 rounded-full bg-brand-100/80 blur-3xl"
-    aria-hidden="true"
-  ></div>
+<section
+  class:list={[
+    'relative overflow-hidden border-b',
+    hasImage ? 'isolate border-brand-800 bg-brand-900' : 'border-line bg-brand-50',
+  ]}
+>
+  {image ? (
+    <>
+      <!-- Imatge: banda superior esvaïda al mòbil, fons complet a partir de sm -->
+      <div class="absolute inset-x-0 top-0 h-[26rem] w-full sm:inset-0 sm:h-full">
+        <Image
+          src={image}
+          alt={imageAlt}
+          widths={[640, 1024, 1600, 1920]}
+          sizes="100vw"
+          format="webp"
+          quality={80}
+          loading="eager"
+          fetchpriority="high"
+          class="h-full w-full object-cover object-[68%_50%] sm:object-center"
+          aria-hidden={imageAlt ? undefined : 'true'}
+        />
+        <!-- Mòbil: la foto es fon amb el fons de marca darrere del text -->
+        <div
+          class="absolute inset-0 bg-gradient-to-b from-brand-900/45 via-brand-900/80 to-brand-900 sm:hidden"
+          aria-hidden="true"
+        ></div>
+        <!-- Escriptori: vel de llegibilitat, més fosc a l'esquerra on va el text -->
+        <div class="absolute inset-0 hidden bg-brand-900/35 sm:block" aria-hidden="true"></div>
+        <div
+          class="absolute inset-0 hidden bg-gradient-to-r from-brand-900/95 via-brand-900/75 to-brand-900/20 sm:block"
+          aria-hidden="true"
+        ></div>
+      </div>
+    </>
+  ) : (
+    <div
+      class="pointer-events-none absolute -right-20 -top-24 size-96 rounded-full bg-brand-100/80 blur-3xl"
+      aria-hidden="true"
+    ></div>
+  )}
 
-  <Container class="relative py-10 sm:py-14 lg:py-16">
-    <Breadcrumbs items={crumbs} />
+  <Container
+    class={cn('relative', hasImage ? 'pt-10 pb-12 sm:py-20 lg:py-24' : 'py-10 sm:py-14 lg:py-16')}
+  >
+    <Breadcrumbs items={crumbs} tone={hasImage ? 'dark' : 'light'} />
 
     <div class:list={['mt-8 max-w-3xl', align === 'center' && 'mx-auto text-center']}>
       {eyebrow && (
-        <p class="font-display text-xs font-bold uppercase tracking-[0.16em] text-brand-500">
+        <p
+          class:list={[
+            'font-display text-xs font-bold uppercase tracking-[0.16em]',
+            hasImage ? 'text-brand-300' : 'text-brand-500',
+          ]}
+        >
           {eyebrow}
         </p>
       )}
-      <h1 class="mt-3 text-3xl font-extrabold leading-tight sm:text-4xl lg:text-5xl">{title}</h1>
+      <h1
+        class:list={[
+          'mt-3 text-3xl font-extrabold leading-tight sm:text-4xl lg:text-5xl',
+          hasImage && 'text-white sm:[text-shadow:0_2px_16px_rgb(0_0_0/0.45)]',
+        ]}
+      >
+        {title}
+      </h1>
       {description && (
-        <p class="mt-4 text-base leading-relaxed text-muted sm:text-lg">{description}</p>
+        <p
+          class:list={[
+            'mt-4 text-base leading-relaxed sm:text-lg',
+            hasImage ? 'text-brand-100' : 'text-muted',
+          ]}
+        >
+          {description}
+        </p>
       )}
       <slot />
     </div>
