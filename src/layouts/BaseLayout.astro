@@ -17,6 +17,8 @@ interface Props {
   type?: 'website' | 'article';
   jsonLd?: JsonLdObject[];
   bodyClass?: string;
+  /** Navbar transparent sobre la imatge del hero mentre no es fa scroll. */
+  headerOverlay?: boolean;
 }
 
 const {
@@ -27,6 +29,7 @@ const {
   type = 'website',
   jsonLd = [],
   bodyClass = 'min-h-screen bg-white',
+  headerOverlay = false,
 } = Astro.props;
 ---
 
@@ -57,7 +60,7 @@ const {
       Saltar al contenido
     </a>
 
-    <Header />
+    <Header overlay={headerOverlay} />
 
     <main id="contenido">
       <slot />

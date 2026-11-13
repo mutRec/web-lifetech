@@ -50,9 +50,10 @@ const jsonLd = [
   title="LifeTech | Sistemas de almacenamiento de energía"
   description={site.description}
   jsonLd={jsonLd}
+  headerOverlay
 >
   <!-- Hero -->
-  <section class="relative isolate overflow-hidden bg-brand-900">
+  <section class="relative isolate -mt-20 overflow-hidden bg-brand-900">
     <!-- Imatge: fons esvaït rere el text al mòbil, fons complet a partir de sm -->
     <div class="absolute inset-x-0 top-0 h-[26rem] w-full sm:inset-0 sm:h-full">
       <Image
@@ -80,7 +81,7 @@ const jsonLd = [
       ></div>
     </div>
 
-    <Container class="relative pt-10 pb-14 sm:py-28 lg:py-32">
+    <Container class="relative pt-30 pb-14 sm:pt-48 sm:pb-28 lg:pt-52 lg:pb-32">
       <div class="max-w-3xl">
         <p class="font-display text-xs font-bold uppercase tracking-[0.18em] text-brand-300">
           Sistemas de almacenamiento de energía
@@ -133,7 +134,12 @@ const jsonLd = [
 
     <div class="mt-12 grid gap-6 md:grid-cols-3">
       {solutions.map((solution) => (
-        <Card href={solution.href} class="group flex h-full flex-col border border-transparent transition-colors duration-200 hover:bg-sky-50 hover:border-sky-200"> <!-- he tret el la class hover i he posat stil propi -->
+        <Card
+          href={solution.href}
+          class="group flex h-full flex-col border border-transparent transition-colors duration-200 hover:bg-sky-50 hover:border-sky-200"
+        >
+          {' '}
+          <!-- he tret el la class hover i he posat stil propi -->
           <span class="flex size-12 items-center justify-center rounded-xl bg-brand-50 text-brand-600 transition-colors group-hover:bg-brand-100">
             <Icon name={solution.icon ?? 'lucide:check'} class="size-6" />
           </span>
@@ -143,10 +149,8 @@ const jsonLd = [
           <p class="mt-2 flex-1 text-sm leading-relaxed text-muted">{solution.description}</p>
           <span class="mt-5 inline-flex items-center gap-2 font-display text-xs font-bold uppercase tracking-wide text-brand-600">
             Ver solución
-            <Icon
-              name="lucide:arrow-right"
-              class="size-4"
-            /> <!-- trec: transition-transform group-hover:translate-x-1 -->
+            <Icon name="lucide:arrow-right" class="size-4" />{' '}
+            <!-- trec: transition-transform group-hover:translate-x-1 -->
           </span>
         </Card>
       ))}

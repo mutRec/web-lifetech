@@ -15,12 +15,13 @@ const description =
 const jsonLd = [webPageSchema({ name: 'Contacto | LifeTech', description, path: '/contacto/' })];
 ---
 
-<BaseLayout title="Contacto" description={description} jsonLd={jsonLd}>
+<BaseLayout title="Contacto" description={description} jsonLd={jsonLd} headerOverlay>
   <PageHero
     title="Contacto"
     description="Si tienes alguna duda sobre nuestros sistemas de almacenamiento, escríbenos y te responderemos lo antes posible."
     crumbs={[{ label: 'Contacto' }]}
     image={heroImage}
+    offsetHeader
   />
 
   <Section tone="white" padding="lg">

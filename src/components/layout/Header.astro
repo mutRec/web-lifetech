@@ -6,6 +6,13 @@ import { mainNav } from '@/data/navigation';
 import { site } from '@/data/site';
 import { isActive } from '@/lib/urls';
 
+interface Props {
+  /** Superposa la navbar a la imatge del hero mentre no es fa scroll. */
+  overlay?: boolean;
+}
+
+const { overlay = false } = Astro.props;
+
 const path = Astro.url.pathname;
 const slugify = (value: string) =>
   value
@@ -23,8 +30,10 @@ const megaColumns = mainNav.find((entry) => entry.columns)?.columns ?? [];
 
 <header
   data-site-header
+  data-overlay={overlay ? 'true' : 'false'}
   data-scrolled="false"
-  class="sticky top-0 z-50 border-b border-line/70 bg-white/95 backdrop-blur transition-shadow data-[scrolled=true]:shadow-header"
+  data-menu-open="false"
+  class="sticky top-0 z-50 border-b border-line/70 bg-white/95 backdrop-blur transition-[background-color,border-color,box-shadow] duration-200 data-[scrolled=true]:shadow-header"
 >
   <Container class="flex h-20 items-center justify-between gap-4">
     <a href="/" class="flex shrink-0 items-center" aria-label="LifeTech — Inicio">
@@ -34,7 +43,17 @@ const megaColumns = mainNav.find((entry) => entry.columns)?.columns ?? [];
         width="329"
         height="50"
         class="h-9 w-auto sm:h-10"
+        data-logo-dark
         fetchpriority="high"
+        decoding="async"
+      />
+      <img
+        src="/brand/logo-life-tech-light.svg"
+        alt="LifeTech"
+        width="329"
+        height="50"
+        class="hidden h-9 w-auto sm:h-10"
+        data-logo-light
         decoding="async"
       />
     </a>
@@ -49,6 +68,7 @@ const megaColumns = mainNav.find((entry) => entry.columns)?.columns ?? [];
                 <button
                   type="button"
                   data-dropdown-trigger
+                  data-nav-fg
                   aria-expanded="false"
                   aria-controls={`menu-${slugify(item.label)}`}
                   class="inline-flex items-center gap-1 rounded-lg px-3 py-2 font-display text-sm font-semibold text-brand-800 transition-colors hover:bg-brand-50 hover:text-brand-600"
@@ -141,6 +161,7 @@ const megaColumns = mainNav.find((entry) => entry.columns)?.columns ?? [];
               <a
                 href={item.href}
                 class={linkClass}
+                data-nav-fg
                 aria-current={item.href && isActive(path, item.href) ? 'page' : undefined}
               >
                 {item.label}
@@ -154,9 +175,10 @@ const megaColumns = mainNav.find((entry) => entry.columns)?.columns ?? [];
     <div class="flex items-center gap-2">
       <a
         href={`tel:${site.phone.href}`}
+        data-nav-fg
         class="hidden items-center gap-2 rounded-lg px-3 py-2 font-display text-sm font-semibold text-brand-800 transition-colors hover:bg-brand-50 hover:text-brand-600 xl:inline-flex"
       >
-        <Icon name="lucide:phone" class="size-4 text-brand-500" />
+        <Icon name="lucide:phone" class="size-4 text-brand-500" data-nav-icon />
         {site.phone.display}
       </a>
 
@@ -169,6 +191,7 @@ const megaColumns = mainNav.find((entry) => entry.columns)?.columns ?? [];
       <button
         type="button"
         data-menu-toggle
+        data-nav-toggle
         aria-expanded="false"
         aria-controls="mobile-menu"
         class="inline-flex size-11 items-center justify-center rounded-lg border border-line text-brand-800 transition-colors hover:bg-brand-50 lg:hidden"
@@ -289,6 +312,64 @@ const megaColumns = mainNav.find((entry) => entry.columns)?.columns ?? [];
   </div>
 </header>
 
+<style>
+  /* Estat glass: la imatge del hero es veu difuminada darrere de la navbar */
+  [data-site-header][data-overlay='true']:not([data-scrolled='true']):not([data-menu-open='true']) {
+    background-color: rgb(0 40 63 / 0.28);
+    border-color: rgb(255 255 255 / 0.14);
+    box-shadow: none;
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+  }
+
+  [data-site-header][data-overlay='true']:not([data-scrolled='true']):not([data-menu-open='true'])
+    [data-nav-fg] {
+    color: #fff;
+  }
+
+  [data-site-header][data-overlay='true']:not([data-scrolled='true']):not([data-menu-open='true'])
+    [data-nav-fg]:hover {
+    background-color: rgb(255 255 255 / 0.12);
+    color: #fff;
+  }
+
+  [data-site-header][data-overlay='true']:not([data-scrolled='true']):not([data-menu-open='true'])
+    [data-nav-fg][aria-current='page'] {
+    color: #fff;
+  }
+
+  [data-site-header][data-overlay='true']:not([data-scrolled='true']):not([data-menu-open='true'])
+    [data-nav-icon] {
+    color: #fff;
+  }
+
+  [data-site-header][data-overlay='true']:not([data-scrolled='true']):not([data-menu-open='true'])
+    [data-nav-toggle] {
+    border-color: rgb(255 255 255 / 0.35);
+    color: #fff;
+  }
+
+  [data-site-header][data-overlay='true']:not([data-scrolled='true']):not([data-menu-open='true'])
+    [data-nav-toggle]:hover {
+    background-color: rgb(255 255 255 / 0.12);
+  }
+
+  /* Logotip clar sobre la foto */
+  [data-site-header] [data-logo-light] {
+    display: none;
+  }
+
+  [data-site-header][data-overlay='true']:not([data-scrolled='true']):not([data-menu-open='true'])
+    [data-logo-dark] {
+    display: none;
+  }
+
+  [data-site-header][data-overlay='true']:not([data-scrolled='true']):not([data-menu-open='true'])
+    [data-logo-light] {
+    display: block;
+  }
+</style>
+
 <script>
   const header = document.querySelector('[data-site-header]');
 
@@ -346,9 +427,9 @@ const megaColumns = mainNav.find((entry) => entry.columns)?.columns ?? [];
       }
     });
 
-    // Ombra en fer scroll
+    // Ombra i fons sòlid en fer scroll
     const onScroll = () => {
-      header.dataset.scrolled = String(window.scrollY > 8);
+      header.dataset.scrolled = String(window.scrollY > 16);
     };
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });
@@ -365,6 +446,7 @@ const megaColumns = mainNav.find((entry) => entry.columns)?.columns ?? [];
       const setMobileOpen = (open: boolean) => {
         toggle.setAttribute('aria-expanded', String(open));
         mobilePanel.hidden = !open;
+        header.dataset.menuOpen = String(open);
         document.body.classList.toggle('overflow-hidden', open);
         iconOpen?.classList.toggle('hidden', open);
         iconClose?.classList.toggle('hidden', !open);

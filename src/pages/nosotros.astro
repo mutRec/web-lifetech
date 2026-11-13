@@ -27,13 +27,14 @@ const milestones = [
 ];
 ---
 
-<BaseLayout title="Nosotros" description={description} jsonLd={jsonLd}>
+<BaseLayout title="Nosotros" description={description} jsonLd={jsonLd} headerOverlay>
   <PageHero
     eyebrow="Nosotros"
     title="Por un futuro más sostenible y eficiente"
     description={description}
     crumbs={[{ label: 'Nosotros' }]}
     image={heroImage}
+    offsetHeader
   />
 
   <!-- Presentació -->

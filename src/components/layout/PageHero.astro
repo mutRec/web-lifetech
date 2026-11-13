@@ -19,6 +19,8 @@ interface Props {
   align?: 'left' | 'center';
   image?: ImageMetadata;
   imageAlt?: string;
+  /** Puja el hero sota la navbar transparent (només amb `image`). */
+  offsetHeader?: boolean;
 }
 
 const {
@@ -29,14 +31,20 @@ const {
   align = 'left',
   image,
   imageAlt = '',
+  offsetHeader = false,
 } = Astro.props;
 
 const hasImage = Boolean(image);
+const imageContainerClass =
+  offsetHeader && hasImage
+    ? 'pt-30 pb-12 sm:pt-40 sm:pb-20 lg:pt-44 lg:pb-24'
+    : 'pt-10 pb-12 sm:py-20 lg:py-24';
 ---
 
 <section
   class:list={[
     'relative overflow-hidden border-b',
+    offsetHeader && hasImage && '-mt-20',
     hasImage ? 'isolate border-brand-800 bg-brand-900' : 'border-line bg-brand-50',
   ]}
 >
@@ -76,9 +84,7 @@ const hasImage = Boolean(image);
     ></div>
   )}
 
-  <Container
-    class={cn('relative', hasImage ? 'pt-10 pb-12 sm:py-20 lg:py-24' : 'py-10 sm:py-14 lg:py-16')}
-  >
+  <Container class={cn('relative', hasImage ? imageContainerClass : 'py-10 sm:py-14 lg:py-16')}>
     <Breadcrumbs items={crumbs} tone={hasImage ? 'dark' : 'light'} />
 
     <div class:list={['mt-8 max-w-3xl', align === 'center' && 'mx-auto text-center']}>
