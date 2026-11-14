@@ -1,0 +1,190 @@
+---
+/**
+ * Índex de productes: /productos/
+ *
+ * Llista totes les sèries de la col·lecció `products` i, a continuació, un
+ * directori amb tots els models agrupats per sèrie.
+ */
+import { Image } from 'astro:assets';
+import { getCollection } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PageHero from '@/components/layout/PageHero.astro';
+import Section from '@/components/ui/Section.astro';
+import SectionHeading from '@/components/ui/SectionHeading.astro';
+import Button from '@/components/ui/Button.astro';
+import Icon from '@/components/ui/Icon.astro';
+import { webPageSchema } from '@/lib/schema';
+
+const description =
+  'Baterías de litio LFP para viviendas, industria y plantas fotovoltaicas. Consulta todas las series y modelos de LifeTech y elige la configuración que mejor se adapta a tu proyecto.';
+
+type ProductEntry = CollectionEntry<'products'>;
+
+function sortByOrder<T extends { data: { order: number } }>(entries: T[]): T[] {
+  return [...entries].sort((a, b) => a.data.order - b.data.order);
+}
+
+const allProducts = await getCollection('products');
+
+const series = sortByOrder(allProducts.filter((item) => item.data.kind === 'series'));
+
+const modelsBySeries = series
+  .map((entry) => ({
+    entry,
+    models: sortByOrder(allProducts.filter((item) => item.data.parent?.id === entry.id)),
+  }))
+  .filter((group) => group.models.length > 0);
+
+const modelCount = (entry: ProductEntry) =>
+  allProducts.filter((item) => item.data.parent?.id === entry.id).length;
+
+const jsonLd = [webPageSchema({ name: 'Productos | LifeTech', description, path: '/productos/' })];
+---
+
+<BaseLayout title="Productos" description={description} jsonLd={jsonLd}>
+  <PageHero
+    eyebrow="Productos"
+    title="Series y modelos de almacenamiento"
+    description="Baterías de litio LFP para viviendas, industria y plantas fotovoltaicas. Consulta el catálogo completo y encuentra la configuración que encaja con tu instalación."
+    crumbs={[{ label: 'Productos' }]}
+  >
+    <div class="mt-8 flex flex-wrap gap-3">
+      <Button href="/contacto/" icon="lucide:arrow-right">
+        Contactar
+      </Button>
+      <Button href="/descarga-productos/" variant="outline" icon="lucide:download">
+        Catálogos y manuales
+      </Button>
+    </div>
+  </PageHero>
+
+  <!-- Series -->
+  <Section tone="white" padding="lg">
+    <SectionHeading
+      eyebrow="Catálogo"
+      title="Una serie para cada necesidad"
+      description="Cada serie responde a un formato, una tensión y un rango de capacidad distintos. Entra en la que mejor encaje con tu proyecto."
+    />
+
+    <ul class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+      {series.map((entry) => {
+        const count = modelCount(entry);
+        return (
+          <li>
+            <a
+              href={`/${entry.data.slug}/`}
+              class="group flex h-full flex-col rounded-2xl border border-line p-5 transition-colors hover:border-brand-300 hover:bg-brand-50"
+            >
+              <span class="flex h-40 items-center justify-center rounded-xl bg-surface p-4">
+                <Image
+                  src={entry.data.hero}
+                  alt={entry.data.title}
+                  widths={[320, 640, 960]}
+                  sizes="(min-width: 1024px) 30vw, (min-width: 640px) 45vw, 92vw"
+                  format="webp"
+                  quality={80}
+                  loading="lazy"
+                  class="max-h-full w-auto object-contain"
+                />
+              </span>
+
+              <span class="mt-5 flex items-start justify-between gap-3">
+                <span class="font-display text-base font-bold text-ink group-hover:text-brand-700">
+                  {entry.data.title}
+                </span>
+                {count > 0 && (
+                  <span class="shrink-0 rounded-full bg-brand-50 px-2.5 py-1 font-display text-[0.65rem] font-bold uppercase tracking-wide text-brand-600 group-hover:bg-white">
+                    {count} {count === 1 ? 'modelo' : 'modelos'}
+                  </span>
+                )}
+              </span>
+
+              <span class="mt-2 flex-1 text-sm leading-relaxed text-muted">
+                {entry.data.excerpt}
+              </span>
+
+              <span class="mt-4 inline-flex items-center gap-2 font-display text-xs font-bold uppercase tracking-wide text-brand-600">
+                Ver serie
+                <Icon name="lucide:arrow-right" class="size-4" />
+              </span>
+            </a>
+          </li>
+        );
+      })}
+    </ul>
+  </Section>
+
+  <!-- Directori de models -->
+  <Section tone="surface" padding="lg">
+    <SectionHeading
+      eyebrow="Modelos"
+      title="Directorio completo"
+      description="Todos los modelos disponibles, agrupados por serie."
+    />
+
+    <div class="mt-12 space-y-10">
+      {modelsBySeries.map((group) => (
+        <div class="border-t border-line pt-8 first:border-t-0 first:pt-0">
+          <div class="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2">
+            <h3 class="font-display text-lg font-bold text-ink">
+              <a href={`/${group.entry.data.slug}/`} class="transition-colors hover:text-brand-700">
+                {group.entry.data.title}
+              </a>
+            </h3>
+            <p class="text-xs uppercase tracking-wide text-muted">
+              {group.models.length} {group.models.length === 1 ? 'modelo' : 'modelos'}
+            </p>
+          </div>
+
+          <ul class="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {group.models.map((model) => (
+              <li>
+                <a
+                  href={`/${model.data.slug}/`}
+                  class="group flex items-center justify-between gap-4 rounded-xl border border-line bg-white px-5 py-4 transition-colors hover:border-brand-300 hover:bg-brand-50"
+                >
+                  <span class="font-display text-sm font-bold text-ink group-hover:text-brand-700">
+                    {model.data.title}
+                  </span>
+                  <Icon
+                    name="lucide:arrow-up-right"
+                    class="size-4 shrink-0 text-logo-gray transition-colors group-hover:text-brand-600"
+                  />
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
+  </Section>
+
+  <!-- CTA -->
+  <Section tone="brand-dark" padding="lg">
+    <div class="grid items-center gap-10 lg:grid-cols-2">
+      <SectionHeading
+        eyebrow="Hablemos"
+        title="¿No sabes qué serie elegir?"
+        description="Cuéntanos tu perfil de consumo, la potencia y el espacio disponible y te ayudamos a definir la configuración adecuada."
+        tone="dark"
+      />
+
+      <div class="flex flex-col gap-3 sm:flex-row lg:justify-self-end">
+        <Button href="/contacto/" variant="light" size="lg" icon="lucide:arrow-right">
+          Contactar
+        </Button>
+        <Button
+          href="/descarga-productos/"
+          variant="outline"
+          size="lg"
+          icon="lucide:download"
+          class="border-white/25 text-white hover:border-white/60 hover:bg-white/10"
+        >
+          Catálogos y manuales
+        </Button>
+      </div>
+    </div>
+  </Section>
+</BaseLayout>

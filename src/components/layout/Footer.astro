@@ -61,12 +61,12 @@ const year = new Date().getFullYear();
             {column.href ? (
               <a
                 href={column.href}
-                class="font-display text-xs font-bold uppercase tracking-[0.14em] text-white transition-colors hover:text-brand-300"
+                class="block font-display text-xs font-bold uppercase tracking-[0.14em] text-white transition-colors hover:text-brand-300 lg:min-h-8"
               >
                 {column.title}
               </a>
             ) : (
-              <p class="font-display text-xs font-bold uppercase tracking-[0.14em] text-white">
+              <p class="font-display text-xs font-bold uppercase tracking-[0.14em] text-white lg:min-h-8">
                 {column.title}
               </p>
             )}

@@ -84,7 +84,7 @@ export const mainNav: NavEntry[] = [
     label: 'Soluciones y productos',
     columns: [
       { title: 'Soluciones', href: '/soluciones/', items: solutions },
-      { title: 'Productos', items: products },
+      { title: 'Productos', href: '/productos/', items: products },
       {
         title: 'Proyectos',
         href: '/soluciones/soluciones-industriales-y-comerciales/',
@@ -115,6 +115,7 @@ export const footerNav: FooterColumn[] = [
   },
   {
     title: 'Productos',
+    href: '/productos/',
     items: products,
   },
   {
