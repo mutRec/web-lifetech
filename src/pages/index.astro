@@ -1,5 +1,4 @@
 ---
-import { Image } from 'astro:assets';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Container from '@/components/ui/Container.astro';
 
@@ -10,6 +9,7 @@ import SectionHeading from '@/components/ui/SectionHeading.astro';
 
 import Button from '@/components/ui/Button.astro';
 import Icon from '@/components/ui/Icon.astro';
+import HeroSlideshow from '@/components/layout/HeroSlideshow.astro';
 
 /*
 import Card from '@/components/ui/Card.astro';
@@ -19,6 +19,14 @@ import { products, solutions } from '@/data/navigation';
 import { site } from '@/data/site';
 import { webPageSchema } from '@/lib/schema';
 import heroImage from '@/assets/images/corporate/slider-principal-life-tech.webp';
+import heroPlantaFv from '@/assets/images/solutions/plantas-fv-hero.webp';
+import heroIndustria from '@/assets/images/solutions/industriales-hero.jpg';
+
+const heroSlides = [
+  { src: heroImage, position: 'object-[68%_50%] sm:object-center' },
+  { src: heroPlantaFv, position: 'object-center' },
+  { src: heroIndustria, position: 'object-center' },
+];
 
 const highlights = [
   {
@@ -60,20 +68,11 @@ const jsonLd = [
 >
   <!-- Hero -->
   <section class="relative isolate -mt-20 overflow-hidden bg-brand-900">
-    <!-- Imatge: fons esvaït rere el text al mòbil, fons complet a partir de sm -->
-    <div class="absolute inset-x-0 top-0 h-[26rem] w-full sm:inset-0 sm:h-full">
-      <Image
-        src={heroImage}
-        alt=""
-        widths={[640, 1024, 1600, 1920]}
-        sizes="100vw"
-        format="webp"
-        quality={80}
-        loading="eager"
-        fetchpriority="high"
-        class="h-full w-full object-cover object-[68%_50%] sm:object-center"
-        aria-hidden="true"
-      />
+    <!-- Imatge de fons rotativa: esvaïda rere el text al mòbil, completa a partir de sm -->
+    <HeroSlideshow
+      images={heroSlides}
+      class="absolute inset-x-0 top-0 h-[26rem] w-full sm:inset-0 sm:h-full"
+    >
       <!-- Mòbil: la foto es fon amb el fons de marca darrere del text -->
       <div
         class="absolute inset-0 bg-gradient-to-b from-brand-900/45 via-brand-900/80 to-brand-900 sm:hidden"
@@ -85,7 +84,7 @@ const jsonLd = [
         class="absolute inset-0 hidden bg-gradient-to-r from-brand-900/95 via-brand-900/75 to-brand-900/20 sm:block"
         aria-hidden="true"
       ></div>
-    </div>
+    </HeroSlideshow>
 
     <Container class="relative pt-30 pb-14 sm:pt-48 sm:pb-28 lg:pt-52 lg:pb-32">
       <div class="max-w-3xl">
@@ -93,7 +92,7 @@ const jsonLd = [
           Sistemas de almacenamiento de energía
         </p>
         <h1 class="mt-4 text-4xl font-extrabold leading-[1.08] text-white sm:text-5xl sm:[text-shadow:0_2px_16px_rgb(0_40_63/0.45)] lg:text-6xl">
-          Energía inteligente para el hogar
+          Energía inteligente para cada necesidad
         </h1>
         <p class="mt-6 max-w-2xl text-base leading-relaxed text-brand-100/90 sm:text-lg">
           Diseñamos y distribuimos sistemas de baterías de alta eficiencia para viviendas, industria
@@ -126,12 +125,10 @@ const jsonLd = [
             </div>
           ))}
         </dl>
-        
       </div>
     </Container>
   </section>
 
-<!-- després d'aquí posaría bloc de codi de les Seccions que he guardat temporalment en un 
+  <!-- després d'aquí posaría bloc de codi de les Seccions que he guardat temporalment en un 
  fitxer a banda anomenat 'index-backup-secciones.astro -->
- 
 </BaseLayout>

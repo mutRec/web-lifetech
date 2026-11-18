@@ -10,6 +10,7 @@ import Container from '@/components/ui/Container.astro';
 import Section from '@/components/ui/Section.astro';
 import SectionHeading from '@/components/ui/SectionHeading.astro';
 import Breadcrumbs from '@/components/layout/Breadcrumbs.astro';
+import HeroSlideshow from '@/components/layout/HeroSlideshow.astro';
 import Button from '@/components/ui/Button.astro';
 import Icon from '@/components/ui/Icon.astro';
 import { webPageSchema, type Crumb } from '@/lib/schema';
@@ -56,26 +57,33 @@ const childLabels =
           'Aplicaciones reales con las que ilustramos cómo se dimensiona y se integra el almacenamiento en cada entorno.',
         link: 'Ver proyecto',
       };
+
+/**
+ * A l'índex de solucions el fons alterna la imatge pròpia amb la de cada
+ * àmbit fill. A la resta de pàgines es manté la imatge única de la solució.
+ */
+const heroImages =
+  childKind === 'solucion'
+    ? [data.hero, ...children.map((child) => child.data.hero)].filter(
+        (image, index, list) =>
+          list.findIndex((candidate) => candidate.src === image.src) === index,
+      )
+    : [data.hero];
 ---
 
 <BaseLayout title={title} description={description} image={data.hero.src} jsonLd={jsonLd}>
   <!-- Hero amb imatge de fons -->
   <section class="relative isolate overflow-hidden bg-brand-900">
-    <Image
-      src={data.hero}
-      alt=""
-      widths={[640, 1024, 1600]}
-      sizes="100vw"
-      format="webp"
-      quality={80}
-      loading="eager"
-      fetchpriority="high"
-      class="absolute inset-0 -z-10 size-full object-cover"
-    />
-    <div
-      class="absolute inset-0 -z-10 bg-gradient-to-r from-brand-900/95 via-brand-900/80 to-brand-900/40"
-      aria-hidden="true"
-    ></div>
+    <HeroSlideshow
+      images={heroImages.map((src) => ({ src }))}
+      widths={[640, 1024, 1600, 1920]}
+      class="absolute inset-0 -z-10"
+    >
+      <div
+        class="absolute inset-0 bg-gradient-to-r from-brand-900/95 via-brand-900/80 to-brand-900/40"
+        aria-hidden="true"
+      ></div>
+    </HeroSlideshow>
 
     <Container class="relative py-14 sm:py-20 lg:py-24">
       <Breadcrumbs items={crumbs} tone="dark" />
@@ -212,10 +220,8 @@ const childLabels =
                 </span>
                 <span class="mt-4 inline-flex items-center gap-2 font-display text-xs font-bold uppercase tracking-wide text-brand-600">
                   {childLabels.link}
-                  <Icon
-                    name="lucide:arrow-right"
-                    class="size-4"
-                  /> <!-- transition-transform group-hover:translate-x-1 -->
+                  <Icon name="lucide:arrow-right" class="size-4" />{' '}
+                  <!-- transition-transform group-hover:translate-x-1 -->
                 </span>
               </span>
             </a>
@@ -256,10 +262,8 @@ const childLabels =
               </span>
               <span class="mt-4 inline-flex items-center gap-2 font-display text-xs font-bold uppercase tracking-wide text-brand-600">
                 Ver producto
-                <Icon
-                  name="lucide:arrow-right"
-                  class="size-4"
-                /> <!-- transition-transform group-hover:translate-x-1 -->
+                <Icon name="lucide:arrow-right" class="size-4" />{' '}
+                <!-- transition-transform group-hover:translate-x-1 -->
               </span>
             </a>
           </li>

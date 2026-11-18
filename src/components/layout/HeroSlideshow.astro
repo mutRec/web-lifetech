@@ -1,0 +1,102 @@
+---
+/**
+ * Fons del hero amb diverses imatges que es van creuant automàticament.
+ * Només renderitza les imatges: els vels de llegibilitat es passen pel slot,
+ * així cada pàgina pot ajustar el contrast del text.
+ */
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+
+import { cn } from '@/lib/cn';
+
+export interface HeroSlide {
+  src: ImageMetadata;
+  /** Classes d'`object-position` per encaixar la imatge al hero. */
+  position?: string;
+}
+
+interface Props {
+  images: HeroSlide[];
+  /** Mil·lisegons que es mostra cada imatge. */
+  interval?: number;
+  widths?: number[];
+  sizes?: string;
+  class?: string;
+}
+
+const {
+  images,
+  interval = 6000,
+  widths = [640, 1024, 1600, 1920],
+  sizes = '100vw',
+  class: className,
+} = Astro.props;
+
+/** No demanem variants més grans que la imatge original. */
+const srcWidths = (image: ImageMetadata) =>
+  Array.from(new Set([...widths.filter((width) => width < image.width), image.width])).sort(
+    (a, b) => a - b,
+  );
+---
+
+<div class={cn('overflow-hidden', className)} data-hero-slideshow data-interval={interval}>
+  {images.map((slide, index) => (
+    <div
+      class="absolute inset-0 opacity-0 transition-opacity duration-1000 ease-in-out data-[state=active]:opacity-100 motion-reduce:transition-none"
+      data-hero-slide
+      data-state={index === 0 ? 'active' : undefined}
+      aria-hidden="true"
+    >
+      <Image
+        src={slide.src}
+        alt=""
+        widths={srcWidths(slide.src)}
+        sizes={sizes}
+        format="webp"
+        quality={80}
+        loading={index === 0 ? 'eager' : 'lazy'}
+        fetchpriority={index === 0 ? 'high' : undefined}
+        class={cn('h-full w-full object-cover', slide.position ?? 'object-center')}
+        aria-hidden="true"
+      />
+    </div>
+  ))}
+
+  <slot />
+</div>
+
+<script>
+  const DEFAULT_INTERVAL = 6000;
+
+  document.querySelectorAll<HTMLElement>('[data-hero-slideshow]').forEach((root) => {
+    const slides = Array.from(root.querySelectorAll<HTMLElement>('[data-hero-slide]'));
+    if (slides.length < 2) return;
+    // Amb moviment reduït es deixa la primera imatge fixa.
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    const interval = Number(root.dataset.interval) || DEFAULT_INTERVAL;
+    let current = 0;
+    let timer: number | undefined;
+
+    const show = (index: number) => {
+      slides[current].removeAttribute('data-state');
+      current = index;
+      slides[current].setAttribute('data-state', 'active');
+    };
+
+    const stop = () => window.clearInterval(timer);
+
+    const start = () => {
+      stop();
+      timer = window.setInterval(() => show((current + 1) % slides.length), interval);
+    };
+
+    // No acumulem timers quan la pestanya no és visible.
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) stop();
+      else start();
+    });
+
+    start();
+  });
+</script>
