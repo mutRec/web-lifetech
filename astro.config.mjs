@@ -4,7 +4,7 @@ import sitemap from '@astrojs/sitemap';
 import icon from 'astro-icon';
 import tailwindcss from '@tailwindcss/vite';
 
-const SITE = 'https://life-tech.es';
+const SITE = 'https://life-tech.abellot.net';
 
 export default defineConfig({
   site: SITE,
