@@ -5,4 +5,4 @@ Allow: /
 Disallow: /gracias/
 Disallow: /404
 
-Sitemap: https://life-tech.es/sitemap-index.xml
+Sitemap: https://life-tech.abellot.net/sitemap-index.xml

@@ -8,7 +8,6 @@
 import { Image } from 'astro:assets';
 import { getCollection } from 'astro:content';
 import type { CollectionEntry } from 'astro:content';
-
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import PageHero from '@/components/layout/PageHero.astro';
 import Section from '@/components/ui/Section.astro';
@@ -16,10 +15,10 @@ import SectionHeading from '@/components/ui/SectionHeading.astro';
 import Button from '@/components/ui/Button.astro';
 import Icon from '@/components/ui/Icon.astro';
 import { webPageSchema } from '@/lib/schema';
+import heroImage from '@/assets/images/corporate/og-default.jpg';
 
 const description =
   'Baterías de litio LFP para viviendas, industria y plantas fotovoltaicas. Consulta todas las series y modelos de LifeTech y elige la configuración que mejor se adapta a tu proyecto.';
-
 type ProductEntry = CollectionEntry<'products'>;
 
 function sortByOrder<T extends { data: { order: number } }>(entries: T[]): T[] {
@@ -27,19 +26,15 @@ function sortByOrder<T extends { data: { order: number } }>(entries: T[]): T[] {
 }
 
 const allProducts = await getCollection('products');
-
 const series = sortByOrder(allProducts.filter((item) => item.data.kind === 'series'));
-
 const modelsBySeries = series
   .map((entry) => ({
     entry,
     models: sortByOrder(allProducts.filter((item) => item.data.parent?.id === entry.id)),
   }))
   .filter((group) => group.models.length > 0);
-
 const modelCount = (entry: ProductEntry) =>
   allProducts.filter((item) => item.data.parent?.id === entry.id).length;
-
 const jsonLd = [webPageSchema({ name: 'Productos | LifeTech', description, path: '/productos/' })];
 ---
 
@@ -49,12 +44,13 @@ const jsonLd = [webPageSchema({ name: 'Productos | LifeTech', description, path:
     title="Series y modelos de almacenamiento"
     description="Baterías de litio LFP para viviendas, industria y plantas fotovoltaicas. Consulta el catálogo completo y encuentra la configuración que encaja con tu instalación."
     crumbs={[{ label: 'Productos' }]}
+    image={heroImage}
   >
     <div class="mt-8 flex flex-wrap gap-3">
       <Button href="/contacto/" icon="lucide:arrow-right">
         Contactar
       </Button>
-      <Button href="/descarga-productos/" variant="outline" icon="lucide:download">
+      <Button href="/descarga-productos/" icon="lucide:download"> <!-- variant="outline" -->
         Catálogos y manuales
       </Button>
     </div>

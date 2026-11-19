@@ -6,7 +6,7 @@
 export const site = {
   name: 'LifeTech',
   legalName: 'LifeTech Energy Solucions',
-  url: 'https://life-tech.es',
+  url: 'https://life-tech.abellot.net',
   lang: 'es',
   locale: 'es_ES',
   defaultTitle: 'LifeTech | Sistemas de almacenamiento de energía',

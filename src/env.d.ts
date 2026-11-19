@@ -1,7 +1,7 @@
 /// <reference types="astro/client" />
 
 interface ImportMetaEnv {
-  /** URL pública del lloc, p. ex. https://life-tech.es */
+  /** URL pública del lloc, p. ex. https://life-tech.abellot.net */
   readonly PUBLIC_SITE_URL?: string;
   /** Endpoint del formulari (Web3Forms) */
   readonly PUBLIC_FORM_ENDPOINT?: string;
